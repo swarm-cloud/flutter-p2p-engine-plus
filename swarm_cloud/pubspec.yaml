@@ -20,8 +20,8 @@ flutter:
   plugin:
     platforms:
       android:
-        default_package: share_plus_android
+        default_package: swarm_cloud_android
       ios:
-        default_package: share_plus_ios
+        default_package: swarm_cloud_ios
       web:
-        default_package: share_plus_web
+        default_package: swarm_cloud_web
