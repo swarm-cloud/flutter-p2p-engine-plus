@@ -19,9 +19,9 @@ dev_dependencies:
 flutter:
   plugin:
     platforms:
-      android:
-        default_package: swarm_cloud_android
-      ios:
-        default_package: swarm_cloud_ios
+      # android:
+      #   default_package: swarm_cloud_android
+      # ios:
+      #   default_package: swarm_cloud_ios
       web:
         default_package: swarm_cloud_web
