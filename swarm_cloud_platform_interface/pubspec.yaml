@@ -1,6 +1,6 @@
 name: swarm_cloud_platform_interface
-description: A new flutter plugin project.
-version: 0.0.1
+description: A platform_interface of swarm cloud sdk
+version: 0.0.2
 homepage:
 
 environment:
@@ -11,7 +11,7 @@ dependencies:
   flutter:
     sdk: flutter
   plugin_platform_interface: ^2.0.0
-  safemap: 2.1.0
+  safemap: ^2.1.0
   
 dev_dependencies:
   flutter_test:

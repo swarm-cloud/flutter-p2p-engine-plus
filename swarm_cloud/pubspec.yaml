@@ -10,6 +10,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  swarm_cloud_platform_interface: 0.0.2
 
 dev_dependencies:
   flutter_test:

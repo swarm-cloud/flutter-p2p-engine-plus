@@ -10,9 +10,10 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  video_player_web_hls: ^0.1.11
+  swarm_cloud_platform_interface: 0.0.2
+  swarm_cloud_video_player_hls: ^0.1.11
   js: ^0.6.3
-
+  
 dev_dependencies:
   flutter_test:
     sdk: flutter
