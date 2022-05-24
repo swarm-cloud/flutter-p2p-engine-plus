@@ -1,4 +1,4 @@
-group 'com.example.swarm_cloud_android'
+group 'com.swarmcloud.sdk'
 version '1.0'
 
 buildscript {
@@ -16,6 +16,9 @@ rootProject.allprojects {
     repositories {
         google()
         mavenCentral()
+        flatDir {
+            dirs project(':swarmcloud').file('libs')
+        }
     }
 }
 
@@ -33,3 +36,12 @@ android {
         minSdkVersion 16
     }
 }
+
+dependencies {
+    implementation 'com.alibaba:fastjson:1.2.58'
+    implementation 'com.orhanobut:logger:2.2.0'
+    implementation 'com.squareup.okhttp3:okhttp:3.12.13'        // Or version 4.5+ to support signal compression
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
+    implementation(name:'webrtc', ext:'aar')
+}
+
