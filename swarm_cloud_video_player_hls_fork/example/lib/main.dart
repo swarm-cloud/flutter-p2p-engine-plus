@@ -25,11 +25,9 @@ class _VideoAppState extends State<VideoApp> {
           setState(() {});
         });
       _controller.setVolume(0.0);
-
     }catch(e)
     {
       print(e);
-
     }
   }
 

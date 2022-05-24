@@ -1,4 +1,6 @@
-name: swarm_cloud_video_player_hls
+# 必须使用video_player_web开头，否则注册不会生效
+# 原理是必须要将本组件的registerWith排在videoplayer后面
+name: video_player_web_hls_swarm_cloud
 description: A fork of video_player_web_hls to support hls settings.
 homepage: https://github.com/swarm-cloud/flutter-p2p-engine-plus
 # 0.1.y+z is compatible with 1.0.0, if you land a breaking change bump
@@ -8,10 +10,11 @@ version: 0.0.1
 
 flutter:
   plugin:
+    implements: video_player
     platforms:
       web:
-        pluginClass: VideoPlayerPluginHls 
-        fileName: video_player_web_hls.dart
+        pluginClass: SwarmVideoPlayerPluginHls 
+        fileName: swarm_cloud_video_player_hls.dart
 
 dependencies:
   flutter:

@@ -10,10 +10,11 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  swarm_cloud_platform_interface: 0.0.2
-  swarm_cloud_video_player_hls: ^0.1.11
+  swarm_cloud_platform_interface: ^0.0.2
+  video_player_web_hls_swarm_cloud: ^0.0.1
   js: ^0.6.3
-  
+  safemap: ^2.1.0
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

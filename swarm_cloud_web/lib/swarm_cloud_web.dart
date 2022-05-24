@@ -6,12 +6,51 @@
 import 'dart:async';
 
 import 'package:flutter/services.dart';
+import 'package:safemap/safemap.dart';
+import 'package:swarm_cloud_platform_interface/swarm_cloud_platform_interface.dart';
 
-class SwarmCloudWeb {
-  static const MethodChannel _channel = MethodChannel('swarm_cloud_web');
+class SwarmCloudWeb extends SwarmCloudPlatform {
+  /// Registers this class as the default instance of [SharePlatform].
+  static void registerWith() {
+    SwarmCloudPlatform.instance = SwarmCloudWeb();
+  }
 
-  static Future<String?> get platformVersion async {
-    final String? version = await _channel.invokeMethod('getPlatformVersion');
-    return version;
+  /// Create a new instance with token and the specified config.
+  Future<int> init(
+    token, {
+    required P2pConfig config,
+    CdnByeInfoListener? infoListener,
+    SegmentIdGenerator? segmentIdGenerator,
+  }) async {
+    return 0;
+  }
+
+  /// Get parsed local stream url by passing the original stream url(m3u8) to CBP2pEngine instance.
+  Future<String?> parseStreamURL(
+    String sourceUrl, [
+    String? videoId,
+  ]) async {
+    return sourceUrl;
+  }
+
+  /// Get the connection state of p2p engine. 获取P2P Engine的连接状态
+  @override
+  Future<bool> isConnected() async {
+    return false;
+  }
+
+  /// Restart p2p engine.
+  Future<void> restartP2p() async {
+    // return false;
+  }
+
+  /// Stop p2p and free used resources.
+  Future<void> stopP2p() async {
+    // return false;
+  }
+
+  /// Get the peer ID of p2p engine. 获取P2P Engine的peer ID
+  Future<String> getPeerId() async {
+    return '';
   }
 }

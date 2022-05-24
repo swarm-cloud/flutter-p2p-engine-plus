@@ -41,10 +41,10 @@ const String _kDefaultErrorMessage =
 /// The web implementation of [VideoPlayerPlatform].
 ///
 /// This class implements the `package:video_player` functionality for the web.
-class VideoPlayerPluginHls extends VideoPlayerPlatform {
+class SwarmVideoPlayerPluginHls extends VideoPlayerPlatform {
   /// Registers this class as the default instance of [VideoPlayerPlatform].
   static void registerWith(Registrar registrar) {
-    VideoPlayerPlatform.instance = VideoPlayerPluginHls();
+    VideoPlayerPlatform.instance = SwarmVideoPlayerPluginHls();
   }
 
   final Map<int, _VideoPlayer> _videoPlayers = <int, _VideoPlayer>{};
@@ -77,6 +77,7 @@ class VideoPlayerPluginHls extends VideoPlayerPlatform {
 
   @override
   Future<int> create(DataSource dataSource) async {
+    print("swarm_cloud_video_player_hls create");
     final int textureId = _textureCounter;
     _textureCounter++;
 
