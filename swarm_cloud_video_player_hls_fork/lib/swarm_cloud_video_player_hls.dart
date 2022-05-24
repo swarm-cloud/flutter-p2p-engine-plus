@@ -42,6 +42,27 @@ const String _kDefaultErrorMessage =
 ///
 /// This class implements the `package:video_player` functionality for the web.
 class SwarmVideoPlayerPluginHls extends VideoPlayerPlatform {
+  /// default config builder
+  static HlsConfig Function(Map<String, String> headers) hlsConfigBuilder =
+      (Map<String, String> headers) => HlsConfig(
+            xhrSetup: allowInterop(
+              (HttpRequest xhr, String _) {
+                if (headers.isEmpty) {
+                  return;
+                }
+
+                if (headers.containsKey('useCookies')) {
+                  xhr.withCredentials = true;
+                }
+                headers.forEach((String key, String value) {
+                  if (key != 'useCookies') {
+                    xhr.setRequestHeader(key, value);
+                  }
+                });
+              },
+            ),
+          );
+
   /// Registers this class as the default instance of [VideoPlayerPlatform].
   static void registerWith(Registrar registrar) {
     VideoPlayerPlatform.instance = SwarmVideoPlayerPluginHls();
@@ -77,7 +98,6 @@ class SwarmVideoPlayerPluginHls extends VideoPlayerPlatform {
 
   @override
   Future<int> create(DataSource dataSource) async {
-    print("swarm_cloud_video_player_hls create");
     final int textureId = _textureCounter;
     _textureCounter++;
 
@@ -245,24 +265,7 @@ class _VideoPlayer {
         (uri.toString().contains('m3u8') || await _testIfM3u8())) {
       try {
         _hls = Hls(
-          HlsConfig(
-            xhrSetup: allowInterop(
-              (HttpRequest xhr, String _) {
-                if (headers.isEmpty) {
-                  return;
-                }
-
-                if (headers.containsKey('useCookies')) {
-                  xhr.withCredentials = true;
-                }
-                headers.forEach((String key, String value) {
-                  if (key != 'useCookies') {
-                    xhr.setRequestHeader(key, value);
-                  }
-                });
-              },
-            ),
-          ),
+          SwarmVideoPlayerPluginHls.hlsConfigBuilder.call(headers),
         );
         _hls!.attachMedia(videoElement);
         // print(hls.config.runtimeType);

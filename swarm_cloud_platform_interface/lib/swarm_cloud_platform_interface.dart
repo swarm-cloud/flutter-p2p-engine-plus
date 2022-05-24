@@ -57,6 +57,27 @@ class SwarmCloudPlatform extends PlatformInterface {
     _instance = instance;
   }
 
+  /// Create a new instance with token and the specified config.
+  Future<int> init(
+    token, {
+    required P2pConfig config,
+    CdnByeInfoListener? infoListener,
+    SegmentIdGenerator? segmentIdGenerator,
+  }) =>
+      _instance.init(
+        token,
+        config: config,
+        infoListener: infoListener,
+        segmentIdGenerator: segmentIdGenerator,
+      );
+
+  /// Get parsed local stream url by passing the original stream url(m3u8) to CBP2pEngine instance.
+  Future<String?> parseStreamURL(
+    String sourceUrl, [
+    String? videoId,
+  ]) =>
+      _instance.parseStreamURL(sourceUrl, videoId);
+
   /// Get the connection state of p2p engine. 获取P2P Engine的连接状态
   Future<bool> isConnected() => _instance.isConnected();
 

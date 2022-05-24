@@ -1,5 +1,5 @@
 name: swarm_cloud
-description: A new flutter plugin project.
+description: Swarm Cloud Flutter SDK.
 version: 0.0.1
 homepage:
 
@@ -10,7 +10,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  swarm_cloud_platform_interface: 0.0.2
+  swarm_cloud_platform_interface: 0.0.3
 
 dev_dependencies:
   flutter_test:

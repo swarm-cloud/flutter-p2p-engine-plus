@@ -5,13 +5,42 @@
 
 import 'dart:async';
 
-import 'package:flutter/services.dart';
-
+import 'package:swarm_cloud_platform_interface/swarm_cloud_platform_interface.dart';
+export 'package:swarm_cloud_platform_interface/swarm_cloud_platform_interface.dart'
+    hide SwarmCloudPlatform;
 class SwarmCloud {
-  static const MethodChannel _channel = MethodChannel('swarm_cloud');
+  static SwarmCloudPlatform get _platform => SwarmCloudPlatform.instance;
 
-  static Future<String?> get platformVersion async {
-    final String? version = await _channel.invokeMethod('getPlatformVersion');
-    return version;
-  }
+  /// Create a new instance with token and the specified config.
+  static Future<int> init(
+    token, {
+    required P2pConfig config,
+    CdnByeInfoListener? infoListener,
+    SegmentIdGenerator? segmentIdGenerator,
+  }) =>
+      _platform.init(
+        token,
+        config: config,
+        infoListener: infoListener,
+        segmentIdGenerator: segmentIdGenerator,
+      );
+
+  /// Get parsed local stream url by passing the original stream url(m3u8) to CBP2pEngine instance.
+  static Future<String?> parseStreamURL(
+    String sourceUrl, [
+    String? videoId,
+  ]) =>
+      _platform.parseStreamURL(sourceUrl, videoId);
+
+  /// Get the connection state of p2p engine. 获取P2P Engine的连接状态
+  static Future<bool> isConnected() => _platform.isConnected();
+
+  /// Restart p2p engine.
+  static Future<void> restartP2p() => _platform.restartP2p();
+
+  /// Stop p2p and free used resources.
+  static Future<void> stopP2p() => _platform.stopP2p();
+
+  /// Get the peer ID of p2p engine. 获取P2P Engine的peer ID
+  static Future<String> getPeerId() => _platform.getPeerId();
 }
