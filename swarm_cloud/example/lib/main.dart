@@ -1,6 +1,8 @@
 import 'package:swarm_cloud/swarm_cloud.dart';
 import 'package:video_player/video_player.dart';
 import 'package:flutter/material.dart';
+import 'package:video_player_web_hls_swarm_cloud/hls.dart';
+import 'package:video_player_web_hls_swarm_cloud/swarm_cloud_video_player_hls.dart';
 
 void main() {
   runApp(VideoApp());
@@ -14,7 +16,7 @@ class VideoApp extends StatefulWidget {
 }
 
 class _VideoAppState extends State<VideoApp> {
-  late VideoPlayerController _controller;
+  VideoPlayerController _controller = VideoPlayerController.network('');
 
   @override
   void initState() {
@@ -24,9 +26,15 @@ class _VideoAppState extends State<VideoApp> {
 
   init() async {
     try {
-      await SwarmCloud.init('free', config: P2pConfig());
+      SwarmCloud.init(
+        'free',
+        config: P2pConfig(
+          logLevel: P2pLogLevel.debug,
+        ),
+      );
       var url = await SwarmCloud.parseStreamURL(
-          'https://bitdash-a.akamaihd.net/content/sintel/hls/playlist.m3u8');
+        'https://bitdash-a.akamaihd.net/content/sintel/hls/playlist.m3u8',
+      );
       _controller = VideoPlayerController.network(url!)
         ..initialize().then((_) {
           setState(() {});
@@ -35,6 +43,7 @@ class _VideoAppState extends State<VideoApp> {
     } catch (e) {
       print(e);
     }
+    print('Swarm Cloud Version: $engineVersion');
   }
 
   @override

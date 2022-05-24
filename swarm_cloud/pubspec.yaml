@@ -11,6 +11,7 @@ dependencies:
   flutter:
     sdk: flutter
   swarm_cloud_platform_interface: 0.0.3
+  swarm_cloud_web: 0.0.3
 
 dev_dependencies:
   flutter_test:
