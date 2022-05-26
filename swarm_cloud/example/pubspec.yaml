@@ -32,10 +32,6 @@ dev_dependencies:
 dependency_overrides:
   swarm_cloud_platform_interface:
     path: ../../swarm_cloud_platform_interface/
-  swarm_cloud_android:
-    path: ../../swarm_cloud_android/
-  swarm_cloud_ios:
-    path: ../../swarm_cloud_ios/
   video_player_web_hls_swarm_cloud:
     path: ../../swarm_cloud_video_player_hls_fork/
   swarm_cloud_web:

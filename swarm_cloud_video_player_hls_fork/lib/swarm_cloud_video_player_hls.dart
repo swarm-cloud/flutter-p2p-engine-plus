@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:html';
 import 'dart:js';
 import 'dart:math';
 
@@ -46,11 +45,10 @@ class SwarmVideoPlayerPluginHls extends VideoPlayerPlatform {
   static HlsConfig Function(Map<String, String> headers) hlsConfigBuilder =
       (Map<String, String> headers) => HlsConfig(
             xhrSetup: allowInterop(
-              (HttpRequest xhr, String _) {
+              (ui.HttpRequest xhr, String _) {
                 if (headers.isEmpty) {
                   return;
                 }
-
                 if (headers.containsKey('useCookies')) {
                   xhr.withCredentials = true;
                 }
@@ -200,7 +198,7 @@ class _VideoPlayer {
   final int textureId;
   final Map<String, String> headers;
 
-  late VideoElement videoElement;
+  late ui.VideoElement videoElement;
   bool isInitialized = false;
   bool isBuffering = false;
   Hls? _hls;
@@ -242,7 +240,7 @@ class _VideoPlayer {
   }
 
   Future<void> initialize() async {
-    videoElement = VideoElement()
+    videoElement = ui.VideoElement()
       ..src = uri
       ..autoplay = false
       ..controls = false
@@ -316,12 +314,12 @@ class _VideoPlayer {
       sendBufferingUpdate();
     });
     // The error event fires when some form of error occurs while attempting to load or perform the media.
-    videoElement.onError.listen((Event _) {
+    videoElement.onError.listen((ui.Event _) {
       setBuffering(false);
       // The Event itself (_) doesn't contain info about the actual error.
       // We need to look at the HTMLMediaElement.error.
       // See: https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement/error
-      final MediaError error = videoElement.error!;
+      final ui.MediaError error = videoElement.error!;
       eventController.addError(PlatformException(
         code: _kErrorValueToErrorName[error.code]!,
         message: error.message != '' ? error.message : _kDefaultErrorMessage,
@@ -350,12 +348,12 @@ class _VideoPlayer {
       // playback for any reason, such as permission issues.
       // The rejection handler is called with a DomException.
       // See: https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement/play
-      final DomException exception = e as DomException;
+      final ui.DomException exception = e as ui.DomException;
       eventController.addError(PlatformException(
         code: exception.name,
         message: exception.message,
       ));
-    }, test: (Object e) => e is DomException);
+    }, test: (Object e) => e is ui.DomException);
   }
 
   void pause() {
@@ -410,7 +408,7 @@ class _VideoPlayer {
     _hls?.stopLoad();
   }
 
-  List<DurationRange> _toDurationRange(TimeRanges buffered) {
+  List<DurationRange> _toDurationRange(ui.TimeRanges buffered) {
     final List<DurationRange> durationRange = <DurationRange>[];
     for (int i = 0; i < buffered.length; i++) {
       durationRange.add(DurationRange(

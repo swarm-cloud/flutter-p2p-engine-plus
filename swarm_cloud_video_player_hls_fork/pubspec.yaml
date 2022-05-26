@@ -12,6 +12,10 @@ flutter:
   plugin:
     implements: video_player
     platforms:
+      android:
+        default_package: video_player_android
+      ios:
+        default_package: video_player_avfoundation
       web:
         pluginClass: SwarmVideoPlayerPluginHls 
         fileName: swarm_cloud_video_player_hls.dart

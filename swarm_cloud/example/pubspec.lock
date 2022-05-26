@@ -203,20 +203,6 @@ packages:
       relative: true
     source: path
     version: "0.0.2"
-  swarm_cloud_android:
-    dependency: "direct overridden"
-    description:
-      path: "../../swarm_cloud_android"
-      relative: true
-    source: path
-    version: "0.0.1"
-  swarm_cloud_ios:
-    dependency: "direct overridden"
-    description:
-      path: "../../swarm_cloud_ios"
-      relative: true
-    source: path
-    version: "0.0.1"
   swarm_cloud_platform_interface:
     dependency: "direct overridden"
     description:

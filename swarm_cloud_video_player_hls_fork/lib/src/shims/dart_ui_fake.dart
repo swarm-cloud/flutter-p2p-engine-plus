@@ -3,7 +3,7 @@
 // found in the LICENSE file.
 
 import 'dart:html' as html;
-
+export 'dart:html';
 // Fake interface for the logic that this package needs from (web-only) dart:ui.
 // This is conditionally exported so the analyzer sees these methods as available.
 

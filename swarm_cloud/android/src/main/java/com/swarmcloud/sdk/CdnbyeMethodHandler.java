@@ -1,5 +1,4 @@
-package com.cdnbye.cdnbye;
-
+package com.swarmcloud.sdk;
 
 import android.app.Activity;
 import android.util.Log;

@@ -1,4 +1,4 @@
-package com.cdnbye.cdnbye;
+package com.swarmcloud.sdk;
 
 import android.app.Activity;
 import android.app.Application;
@@ -17,7 +17,7 @@ import io.flutter.embedding.engine.plugins.activity.ActivityAware;
 import io.flutter.embedding.engine.plugins.activity.ActivityPluginBinding;
 
 // import com.cdnbye.sdk.*;
-import com.cdnbye.cdnbye.*;
+import com.swarmcloud.sdk.*;
 
 import java.util.HashMap;
 import java.util.List;

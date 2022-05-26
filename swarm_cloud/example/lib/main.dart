@@ -1,8 +1,6 @@
 import 'package:swarm_cloud/swarm_cloud.dart';
 import 'package:video_player/video_player.dart';
 import 'package:flutter/material.dart';
-import 'package:video_player_web_hls_swarm_cloud/hls.dart';
-import 'package:video_player_web_hls_swarm_cloud/swarm_cloud_video_player_hls.dart';
 
 void main() {
   runApp(VideoApp());
@@ -43,7 +41,7 @@ class _VideoAppState extends State<VideoApp> {
     } catch (e) {
       print(e);
     }
-    print('Swarm Cloud Version: $engineVersion');
+    // print('Swarm Cloud Version: $engineVersion');
   }
 
   @override

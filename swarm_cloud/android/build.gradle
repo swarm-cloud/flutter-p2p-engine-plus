@@ -17,7 +17,7 @@ rootProject.allprojects {
         google()
         mavenCentral()
         flatDir {
-            dirs project(':swarmcloud').file('libs')
+            dirs project(':swarm_cloud').file('libs')
         }
     }
 }
