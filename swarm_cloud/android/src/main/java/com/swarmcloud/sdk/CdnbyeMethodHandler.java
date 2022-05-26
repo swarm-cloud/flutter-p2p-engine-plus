@@ -96,7 +96,7 @@ public class CdnbyeMethodHandler implements MethodChannel.MethodCallHandler {
             if(configMap.get("httpHeaders") != null)
                 builder = builder.httpHeadersForHls((Map<String, String>) configMap.get("httpHeaders"));
 
-            builder = builder.httpLoadTime((long) configMap.get("httpLoadTime"));
+            builder = builder.httpLoadTime((int) configMap.get("httpLoadTime"));
             builder = builder.logPersistent((boolean) configMap.get("logPersistent"));
             builder = builder.sharePlaylist((boolean) configMap.get("sharePlaylist"));
             builder = builder.waitForPeer((boolean) configMap.get("waitForPeer"));

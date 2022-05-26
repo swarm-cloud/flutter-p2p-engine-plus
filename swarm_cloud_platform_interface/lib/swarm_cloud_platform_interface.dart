@@ -9,6 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:plugin_platform_interface/plugin_platform_interface.dart';
 import 'package:safemap/safemap.dart';
+import 'package:swarm_cloud_platform_interface/event_channel.dart';
 
 typedef CdnByeInfoListener = void Function(Map<String, dynamic>);
 
@@ -30,6 +31,7 @@ SegmentIdGenerator defaultSegmentIdGenerator = (
   }
   return segId;
 };
+
 typedef SegmentIdGenerator = String? Function(
   String streamId,
   int sn,
@@ -43,7 +45,7 @@ class SwarmCloudPlatform extends PlatformInterface {
 
   static final Object _token = Object();
 
-  static SwarmCloudPlatform _instance = MethodChannelShare();
+  static SwarmCloudPlatform _instance = SwarmCloudChannel();
 
   /// The default instance of [SwarmCloudPlatform] to use.
   ///
