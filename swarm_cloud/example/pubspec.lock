@@ -202,14 +202,14 @@ packages:
       path: ".."
       relative: true
     source: path
-    version: "0.0.2"
+    version: "0.1.0"
   swarm_cloud_platform_interface:
     dependency: "direct overridden"
     description:
       path: "../../swarm_cloud_platform_interface"
       relative: true
     source: path
-    version: "0.0.3"
+    version: "0.1.0"
   swarm_cloud_web:
     dependency: "direct overridden"
     description:

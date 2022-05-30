@@ -30,10 +30,9 @@ class _VideoAppState extends State<VideoApp> {
           logLevel: P2pLogLevel.debug,
         ),
       );
-      var url = await SwarmCloud.parseStreamURL(
-        'https://bitdash-a.akamaihd.net/content/sintel/hls/playlist.m3u8',
-      );
-      _controller = VideoPlayerController.network(url!)
+      var url = 'https://hnzy3.hnzyww.com:65/20220419/amEOrp47/index.m3u8';
+      // url = await SwarmCloud.parseStreamURL(url) ?? url;
+      _controller = VideoPlayerController.network(url)
         ..initialize().then((_) {
           setState(() {});
         });

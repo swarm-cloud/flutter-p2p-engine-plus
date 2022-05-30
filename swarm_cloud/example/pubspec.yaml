@@ -20,7 +20,7 @@ dependencies:
 
   swarm_cloud:
     path: ../
-  video_player_web_hls_swarm_cloud: 0.0.3
+  video_player_web_hls_swarm_cloud: ^0.1.0
   video_player: any
   cupertino_icons: ^0.1.3
 

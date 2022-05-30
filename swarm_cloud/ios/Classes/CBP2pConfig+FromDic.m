@@ -20,8 +20,8 @@
     if(![configMap[@"announce"] isKindOfClass:[NSNull class]])
         config.announce = (NSString *)configMap[@"announce"];
     
-    if(![configMap[@"channelIdPrefix"] isKindOfClass:[NSNull class]])
-        config.channelIdPrefix = (NSString *)configMap[@"channelIdPrefix"];
+//    if(![configMap[@"channelIdPrefix"] isKindOfClass:[NSNull class]])
+//        config.channelIdPrefix = (NSString *)configMap[@"channelIdPrefix"];
     
     if(![configMap[@"tag"] isKindOfClass:[NSNull class]])
         config.tag = (NSString *)configMap[@"tag"];
