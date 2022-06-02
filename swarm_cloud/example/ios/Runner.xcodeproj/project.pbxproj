@@ -8,10 +8,9 @@
 
 /* Begin PBXBuildFile section */
 		1498D2341E8E89220040F4C2 /* GeneratedPluginRegistrant.m in Sources */ = {isa = PBXBuildFile; fileRef = 1498D2331E8E89220040F4C2 /* GeneratedPluginRegistrant.m */; };
-		309EC1A8DAEA279438C72808 /* Pods_Runner.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CEA116683B222CD4A0F7117B /* Pods_Runner.framework */; };
 		3B3967161E833CAA004F5970 /* AppFrameworkInfo.plist in Resources */ = {isa = PBXBuildFile; fileRef = 3B3967151E833CAA004F5970 /* AppFrameworkInfo.plist */; };
-		57CD205D283E66FD0006471E /* swarm_cloud_ios.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 57CD205C283E66FD0006471E /* swarm_cloud_ios.framework */; };
-		57CD2062283E672C0006471E /* SwarmCloudSDK.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 57CD205E283E67010006471E /* SwarmCloudSDK.xcframework */; };
+		54006A947DCE8B74AF396F30 /* Pods_Runner.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CEA116683B222CD4A0F7117B /* Pods_Runner.framework */; };
+		57DF7A482844F0EF00C0E4E8 /* SwarmCloudSDK.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 57CD205E283E67010006471E /* SwarmCloudSDK.xcframework */; };
 		74858FAF1ED2DC5600515810 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74858FAE1ED2DC5600515810 /* AppDelegate.swift */; };
 		97C146FC1CF9000F007C117D /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 97C146FA1CF9000F007C117D /* Main.storyboard */; };
 		97C146FE1CF9000F007C117D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 97C146FD1CF9000F007C117D /* Assets.xcassets */; };
@@ -36,6 +35,7 @@
 		1498D2331E8E89220040F4C2 /* GeneratedPluginRegistrant.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GeneratedPluginRegistrant.m; sourceTree = "<group>"; };
 		3B3967151E833CAA004F5970 /* AppFrameworkInfo.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = AppFrameworkInfo.plist; path = Flutter/AppFrameworkInfo.plist; sourceTree = "<group>"; };
 		478722FD00E2ADA78A479D22 /* Pods-Runner.profile.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Runner.profile.xcconfig"; path = "Target Support Files/Pods-Runner/Pods-Runner.profile.xcconfig"; sourceTree = "<group>"; };
+		573498B72844E9B600BAFB04 /* swarm_cloud.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = swarm_cloud.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		57CD205C283E66FD0006471E /* swarm_cloud_ios.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = swarm_cloud_ios.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		57CD205E283E67010006471E /* SwarmCloudSDK.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = SwarmCloudSDK.xcframework; path = Pods/SwarmCloudSDK/SwarmCloudSDK.xcframework; sourceTree = "<group>"; };
 		57CD2060283E67220006471E /* swarm_cloud_ios.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = swarm_cloud_ios.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -59,9 +59,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				57CD2062283E672C0006471E /* SwarmCloudSDK.xcframework in Frameworks */,
-				57CD205D283E66FD0006471E /* swarm_cloud_ios.framework in Frameworks */,
-				309EC1A8DAEA279438C72808 /* Pods_Runner.framework in Frameworks */,
+				57DF7A482844F0EF00C0E4E8 /* SwarmCloudSDK.xcframework in Frameworks */,
+				54006A947DCE8B74AF396F30 /* Pods_Runner.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -126,6 +125,7 @@
 		BB4E01E782CCE9DE5ADC7E95 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				573498B72844E9B600BAFB04 /* swarm_cloud.framework */,
 				57CD2060283E67220006471E /* swarm_cloud_ios.framework */,
 				57CD205E283E67010006471E /* SwarmCloudSDK.xcframework */,
 				57CD205C283E66FD0006471E /* swarm_cloud_ios.framework */,
@@ -373,6 +373,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
+				MACH_O_TYPE = staticlib;
 				PRODUCT_BUNDLE_IDENTIFIER = com.example.example;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "Runner/Runner-Bridging-Header.h";
@@ -503,6 +504,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
+				MACH_O_TYPE = staticlib;
 				PRODUCT_BUNDLE_IDENTIFIER = com.example.example;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "Runner/Runner-Bridging-Header.h";
@@ -527,6 +529,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
+				MACH_O_TYPE = staticlib;
 				PRODUCT_BUNDLE_IDENTIFIER = com.example.example;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "Runner/Runner-Bridging-Header.h";

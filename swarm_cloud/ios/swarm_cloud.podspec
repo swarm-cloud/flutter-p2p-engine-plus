@@ -17,7 +17,8 @@ A new flutter plugin project.
   s.public_header_files = 'Classes/**/*.h'
   s.dependency 'Flutter'
 
-  s.dependency 'SwarmCloudSDK', '2.5.0'
+  # s.dependency 'WebRTCDatachannel', '0.0.1'
+  s.dependency 'SwarmCloudSDK', '2.4.1'
   
   s.platform = :ios, '12.0'
 
