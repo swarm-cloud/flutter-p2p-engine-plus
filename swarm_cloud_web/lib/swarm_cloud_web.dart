@@ -43,7 +43,7 @@ class SwarmCloudWeb extends SwarmCloudPlatform {
           ["none", "debug", "info", "warn", "error"][config.logLevel.index];
       hlsConfig.webRTCConfig = config.webRTCConfig;
       // hlsConfig.wsSignalerAddr = config.wsSignalerAddr;
-      hlsConfig.announce = config.announce;
+      // hlsConfig.announce = config.announce;
       // hlsConfig.diskCacheLimit = config.diskCacheLimit;
       hlsConfig.memoryCacheLimit = config.memoryCacheLimit;
       // hlsConfig.memoryCacheCountLimit = config.memoryCacheCountLimit;

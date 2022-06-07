@@ -11,7 +11,7 @@ import 'package:video_player_platform_interface/video_player_platform_interface.
 
 import 'hls.dart';
 import 'no_script_tag_exception.dart';
-import 'src/shims/dart_ui.dart' as ui;
+import 'src/shims/dart_ui_fake.dart' as ui;
 
 // An error code value to error name Map.
 // See: https://developer.mozilla.org/en-US/docs/Web/API/MediaError/code
