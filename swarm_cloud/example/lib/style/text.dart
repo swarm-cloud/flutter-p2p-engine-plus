@@ -4,7 +4,7 @@ import 'color.dart';
 import 'size.dart';
 import 'package:flutter/material.dart';
 
-double get oneLineH => Platform.isIOS ? 1.3 : 1.25;
+double get oneLineH => 1.3;
 
 class StandardTextStyle {
   static const TextStyle big = TextStyle(

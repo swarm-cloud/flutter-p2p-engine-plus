@@ -20,6 +20,7 @@ class SwarmCloudWeb extends SwarmCloudPlatform {
   }
 
   /// Create a new instance with token and the specified config.
+  @override
   Future<int> init(
     token, {
     required P2pConfig config,
@@ -42,39 +43,26 @@ class SwarmCloudWeb extends SwarmCloudPlatform {
       hlsConfig.logLevel =
           ["none", "debug", "info", "warn", "error"][config.logLevel.index];
       hlsConfig.webRTCConfig = config.webRTCConfig;
-      // hlsConfig.wsSignalerAddr = config.wsSignalerAddr;
-      // hlsConfig.announce = config.announce;
-      // hlsConfig.diskCacheLimit = config.diskCacheLimit;
+      hlsConfig.announce = config.announce;
       hlsConfig.memoryCacheLimit = config.memoryCacheLimit;
-      // hlsConfig.memoryCacheCountLimit = config.memoryCacheCountLimit;
       hlsConfig.p2pEnabled = config.p2pEnabled;
-      // hlsConfig.downloadTimeout = config.downloadTimeout;
-      // hlsConfig.dcDownloadTimeout = config.dcDownloadTimeout;
-      // hlsConfig.tag = config.tag;
-      // hlsConfig.localPort = config.localPort;
-      // hlsConfig.maxPeerConnections = config.maxPeerConnections;
       hlsConfig.useHttpRange = config.useHttpRange;
-      // hlsConfig.wifiOnly = config.wifiOnly;
-      // hlsConfig.httpHeaders = config.httpHeaders;
-      // hlsConfig.channelIdPrefix = config.channelIdPrefix;
-      // hlsConfig.isSetTopBox = config.isSetTopBox;
       hlsConfig.httpLoadTime = config.httpLoadTime;
-      // hlsConfig.logPersistent = config.logPersistent;
       hlsConfig.sharePlaylist = config.sharePlaylist;
-      // hlsConfig.waitForPeerInAndroid = config.waitForPeerInAndroid;
-      // hlsConfig.waitForPeerTimeoutInAndroid =
-      //     config.waitForPeerTimeoutInAndroid;
-      // hlsConfig.hlsMediaFiles = config.hlsMediaFiles;
-      // hlsConfig.logFilePathInIos = config.logFilePathInIos;
 
       // TODO: infoListener
+      // hlsConfig.sharePlaylist = config.sharePlaylist;
+      
       // TODO: segmentIdGenerator
+      // hlsConfig.sharePlaylist = config.sharePlaylist;
+
       return hlsConfig;
     };
     return 0;
   }
 
   /// Get parsed local stream url by passing the original stream url(m3u8) to CBP2pEngine instance.
+  @override
   Future<String?> parseStreamURL(
     String sourceUrl, [
     String? videoId,
@@ -89,16 +77,19 @@ class SwarmCloudWeb extends SwarmCloudPlatform {
   }
 
   /// Restart p2p engine.
+  @override
   Future<void> restartP2p() async {
     // return false;
   }
 
   /// Stop p2p and free used resources.
+  @override
   Future<void> stopP2p() async {
     // return false;
   }
 
   /// Get the peer ID of p2p engine. 获取P2P Engine的peer ID
+  @override
   Future<String> getPeerId() async {
     return '';
   }
