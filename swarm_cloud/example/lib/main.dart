@@ -1,3 +1,5 @@
+import 'dart:html';
+
 import 'package:flutter/services.dart';
 import 'package:swarm_cloud/swarm_cloud.dart';
 import 'package:swarm_cloud_example/style/color.dart';
@@ -39,6 +41,7 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
+    print('init');
     init();
   }
 
@@ -55,7 +58,17 @@ class _HomePageState extends State<HomePage> {
           logLevel: P2pLogLevel.debug,
         ),
         infoListener: (info) {
+          window.console.log(info);
           print('p2p listen: $info');
+        },
+        segmentIdGenerator: (
+          String streamId,
+          int sn,
+          String segmentUrl,
+          String? range,
+        ) {
+          print('segmentIdGenerator');
+          return segmentUrl;
         },
       );
       urlResult = await SwarmCloud.parseStreamURL(url) ?? url;

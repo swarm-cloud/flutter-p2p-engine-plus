@@ -43,23 +43,25 @@ const String _kDefaultErrorMessage =
 class SwarmVideoPlayerPluginHls extends VideoPlayerPlatform {
   /// default config builder
   static P2PHlsConfig Function(Map<String, String> headers) hlsConfigBuilder =
-      (Map<String, String> headers) => P2PHlsConfig(
-            xhrSetup: allowInterop(
-              (HttpRequest xhr, String _) {
-                if (headers.isEmpty) {
-                  return;
-                }
-                if (headers.containsKey('useCookies')) {
-                  xhr.withCredentials = true;
-                }
-                headers.forEach((String key, String value) {
-                  if (key != 'useCookies') {
-                    xhr.setRequestHeader(key, value);
-                  }
-                });
-              },
-            ),
-          );
+      (Map<String, String> headers) {
+    return P2PHlsConfig(
+      xhrSetup: allowInterop(
+        (HttpRequest xhr, String _) {
+          if (headers.isEmpty) {
+            return;
+          }
+          if (headers.containsKey('useCookies')) {
+            xhr.withCredentials = true;
+          }
+          headers.forEach((String key, String value) {
+            if (key != 'useCookies') {
+              xhr.setRequestHeader(key, value);
+            }
+          });
+        },
+      ),
+    );
+  };
 
   /// Registers this class as the default instance of [VideoPlayerPlatform].
   static void registerWith(Registrar registrar) {
@@ -259,17 +261,20 @@ class _VideoPlayer {
     ui.platformViewRegistry.registerViewFactory(
         'videoPlayer-$textureId', (int viewId) => videoElement);
 
-    if (P2PEngine.isSupported() &&
+    if (P2P.isSupported &&
         (uri.toString().contains('m3u8') || await _testIfM3u8())) {
       try {
-        _hls = Hls(
-          SwarmVideoPlayerPluginHls.hlsConfigBuilder.call(headers),
-        );
+        var config = SwarmVideoPlayerPluginHls.hlsConfigBuilder.call(headers);
+        _hls = Hls(config);
         _hls!.attachMedia(videoElement);
-        // print(hls.config.runtimeType);
         _hls!.on('hlsMediaAttached', allowInterop((dynamic _, dynamic __) {
           _hls!.loadSource(uri.toString());
         }));
+        // _hls!.p2pEngine.on('stats', allowInterop((a) {
+        //   window.console.warn('_hls!.p2pEngine.on(stats');
+        //   window.console.warn(a);
+        //   window.console.warn('------------------------');
+        // }));
         _hls!.on('hlsError', allowInterop((dynamic _, dynamic data) {
           final ErrorData _data = ErrorData(data);
           if (_data.fatal) {

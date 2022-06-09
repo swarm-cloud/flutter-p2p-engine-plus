@@ -5,22 +5,37 @@ import 'dart:html';
 
 import 'package:js/js.dart';
 
+@JS('Hls.isSupported')
+external bool _isSupported();
+
+@JS('Hls.engineVersion')
+external String _engineVersion;
+
+@JS('Hls.WEBRTC_SUPPORT')
+external bool _WEBRTC_SUPPORT;
+
+@JS('P2PEngine.protocolVersion')
+external bool _protocolVersion;
+
+@JS('P2PEngine.version')
+external bool _version;
+
+class P2P {
+  static bool get isSupported => _isSupported();
+
+  static String get engineVersion => _engineVersion;
+
+  static bool get WEBRTC_SUPPORT => _WEBRTC_SUPPORT;
+
+  static bool get protocolVersion => _protocolVersion;
+
+  static bool get version => _version;
+}
+
 @JS()
 class P2PEngine {
-  @JS('Hls.isSupported')
-  external static bool isSupported();
-
-  @JS('Hls.engineVersion')
-  external static String engineVersion;
-
-  @JS('Hls.WEBRTC_SUPPORT')
-  external static bool WEBRTC_SUPPORT;
-
-  @JS('P2PEngine.protocolVersion')
-  external static bool protocolVersion;
-
-  @JS('P2PEngine.version')
-  external static bool version;
+  @JS()
+  external void on(String event, Function callback);
 }
 
 @JS()
@@ -38,6 +53,8 @@ class Hls {
 
   @JS()
   external void on(String event, Function callback);
+
+  external P2PEngine p2pEngine;
 
   external P2PHlsConfig config;
 }
@@ -96,13 +113,10 @@ class P2PHlsConfig {
   /// totalP2PDownloaded: 从P2P下载的数据量（单位KB）
   /// totalP2PUploaded: P2P上传的数据量（单位KB）
   /// p2pDownloadSpeed: P2P下载速度（单位KB/s）
+  // @JS()
+  // external dynamic Function(dynamic data)? getStats;
   @JS()
-  external void Function(
-    int totalP2PDownloaded,
-    int totalP2PUploaded,
-    int totalHTTPDownloaded,
-    int p2pDownloadSpeed,
-  )? getStats;
+  external Function get getStats;
 
   /// 获取本节点的Id
   @JS()
@@ -126,14 +140,18 @@ class P2PHlsConfig {
   /// 插件默认用ts的绝地路径(url)来标识每个ts文件
   /// 所以需要通过钩子函数重新构造标识符。
   @JS()
-  external String? Function(
-    String streamId,
-    int sn,
-    String segmentUrl,
-    String? range,
-  )? segmentId;
+  external dynamic Function(dynamic data)? segmentId;
 
-  external factory P2PHlsConfig({Function xhrSetup});
+  external factory P2PHlsConfig({
+    Function xhrSetup,
+    P2PSettingConfig p2pConfig,
+  });
+}
+
+@JS()
+@anonymous
+class P2PSettingConfig {
+  external factory P2PSettingConfig({Function getStats});
 }
 
 class ErrorData {

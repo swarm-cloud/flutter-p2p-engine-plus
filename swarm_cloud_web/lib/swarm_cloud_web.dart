@@ -28,9 +28,10 @@ class SwarmCloudWeb extends SwarmCloudPlatform {
     SegmentIdGenerator? segmentIdGenerator,
   }) async {
     SwarmVideoPlayerPluginHls.hlsConfigBuilder = (headers) {
-      var hlsConfig = HlsConfig(
+      var hlsConfig = P2PHlsConfig(
         xhrSetup: allowInterop(
           (HttpRequest xhr, String _) {
+            window.console.warn('P2PHlsConfig xhrSetup');
             if (headers.isEmpty) return;
             if (headers.containsKey('useCookies')) xhr.withCredentials = true;
             headers.forEach((String key, String value) {
@@ -38,7 +39,19 @@ class SwarmCloudWeb extends SwarmCloudPlatform {
             });
           },
         ),
+        p2pConfig: P2PSettingConfig(
+          getStats: allowInterop(
+            (data, data2, data3, data4) {
+              window.console.warn('infoListener Start');
+              window.console.warn([data, data2, data3, data4]);
+              window.console.warn('infoListener End');
+              // infoListener?.call(map);
+            },
+          ),
+        ),
       );
+      window.console.error('hlsConfig');
+      window.console.error(hlsConfig);
       hlsConfig.token = token;
       hlsConfig.logLevel =
           ["none", "debug", "info", "warn", "error"][config.logLevel.index];
@@ -50,12 +63,27 @@ class SwarmCloudWeb extends SwarmCloudPlatform {
       hlsConfig.httpLoadTime = config.httpLoadTime;
       hlsConfig.sharePlaylist = config.sharePlaylist;
 
-      // TODO: infoListener
-      // hlsConfig.sharePlaylist = config.sharePlaylist;
-      
-      // TODO: segmentIdGenerator
-      // hlsConfig.sharePlaylist = config.sharePlaylist;
+      // infoListener
+      // if (infoListener != null) {
+      //   hlsConfig.getStats = allowInterop((map) {
+      //     window.console.log('infoListener Start');
+      //     window.console.log(map);
+      //     window.console.log('infoListener End');
+      //     infoListener(map);
+      //   });
+      // }
 
+      // segmentIdGenerator
+      if (segmentIdGenerator != null) {
+        hlsConfig.segmentId = allowInterop((e) {
+          return segmentIdGenerator(
+            e["streamId"],
+            e["sn"],
+            e["segmentUrl"],
+            e["range"],
+          );
+        });
+      }
       return hlsConfig;
     };
     return 0;
@@ -79,18 +107,21 @@ class SwarmCloudWeb extends SwarmCloudPlatform {
   /// Restart p2p engine.
   @override
   Future<void> restartP2p() async {
+    // TODO: restartP2p
     // return false;
   }
 
   /// Stop p2p and free used resources.
   @override
   Future<void> stopP2p() async {
+    // TODO: stopP2p
     // return false;
   }
 
   /// Get the peer ID of p2p engine. 获取P2P Engine的peer ID
   @override
   Future<String> getPeerId() async {
+    // TODO: getPeerId
     return '';
   }
 }
