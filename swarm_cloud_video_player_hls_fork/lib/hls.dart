@@ -62,6 +62,65 @@ class Hls {
 @JS()
 @anonymous
 class P2PHlsConfig {
+  @JS()
+  external Function get xhrSetup;
+
+  // @JS()
+  // external dynamic Function(dynamic data)? getStats;
+  @JS()
+  external Function get getStats;
+
+  external factory P2PHlsConfig({
+    Function xhrSetup,
+    P2PSettingConfig p2pConfig,
+  });
+}
+
+@JS()
+@anonymous
+class P2PSettingConfig {
+  external factory P2PSettingConfig({
+    /// 获取p2p下载信息
+    /// 该回调函数可以获取p2p信息，包括：
+    /// totalHTTPDownloaded: 从HTTP(CDN)下载的数据量（单位KB）
+    /// totalP2PDownloaded: 从P2P下载的数据量（单位KB）
+    /// totalP2PUploaded: P2P上传的数据量（单位KB）
+    /// p2pDownloadSpeed: P2P下载速度（单位KB/s）
+    void Function(
+      int totalP2PDownloaded,
+      int totalP2PUploaded,
+      int totalHTTPDownloaded,
+      int p2pDownloadSpeed,
+    )?
+        getStats,
+
+    /// 获取本节点的Id
+    void Function(int peerId)? getPeerId,
+
+    /// 获取成功连接的节点的信息
+    void Function(int peers)? getPeersInfo,
+
+    /// 某些流媒体提供商的m3u8是动态生成的
+    /// 不同节点的m3u8地址不一样
+    /// 例如example.com/clientId1/streamId.m3u8和example.com/clientId2/streamId.m3u8
+    /// 而本插件默认使用m3u8地址(去掉查询参数)作为channelId。
+    /// 这时候就要构造一个共同的chanelId，使实际观看同一直播/视频的节点处在相同频道中。
+    String? Function(int m3u8Url)? channelId,
+
+    /// 解决动态ts路径问题
+    /// 类似动态m3u8路径问题，相同ts文件的路径也可能有差异
+    /// 这时候需要忽略ts路径差异的部分
+    /// 插件默认用ts的绝地路径(url)来标识每个ts文件
+    /// 所以需要通过钩子函数重新构造标识符。
+    dynamic Function(
+      String streamId,
+      int sn,
+      String segmentUrl,
+      String? range,
+    )?
+        segmentId,
+  });
+
   /// 默认：boolean	'error'	log的等级，分为'warn'、'error'、'none'，设为true等于'warn'，设为false等于'none'。
   external String? logLevel;
 
@@ -103,55 +162,6 @@ class P2PHlsConfig {
 
   ///	默认：true	向在线IP数据库请求ASN等信息，从而获得更准确的调度，会延迟P2P启动时间。
   external bool? geoIpPreflight;
-
-  @JS()
-  external Function get xhrSetup;
-
-  /// 获取p2p下载信息
-  /// 该回调函数可以获取p2p信息，包括：
-  /// totalHTTPDownloaded: 从HTTP(CDN)下载的数据量（单位KB）
-  /// totalP2PDownloaded: 从P2P下载的数据量（单位KB）
-  /// totalP2PUploaded: P2P上传的数据量（单位KB）
-  /// p2pDownloadSpeed: P2P下载速度（单位KB/s）
-  // @JS()
-  // external dynamic Function(dynamic data)? getStats;
-  @JS()
-  external Function get getStats;
-
-  /// 获取本节点的Id
-  @JS()
-  external void Function(int peerId)? getPeerId;
-
-  /// 获取成功连接的节点的信息
-  @JS()
-  external void Function(int peers)? getPeersInfo;
-
-  /// 某些流媒体提供商的m3u8是动态生成的
-  /// 不同节点的m3u8地址不一样
-  /// 例如example.com/clientId1/streamId.m3u8和example.com/clientId2/streamId.m3u8
-  /// 而本插件默认使用m3u8地址(去掉查询参数)作为channelId。
-  /// 这时候就要构造一个共同的chanelId，使实际观看同一直播/视频的节点处在相同频道中。
-  @JS()
-  external String? Function(int m3u8Url)? channelId;
-
-  /// 解决动态ts路径问题
-  /// 类似动态m3u8路径问题，相同ts文件的路径也可能有差异
-  /// 这时候需要忽略ts路径差异的部分
-  /// 插件默认用ts的绝地路径(url)来标识每个ts文件
-  /// 所以需要通过钩子函数重新构造标识符。
-  @JS()
-  external dynamic Function(dynamic data)? segmentId;
-
-  external factory P2PHlsConfig({
-    Function xhrSetup,
-    P2PSettingConfig p2pConfig,
-  });
-}
-
-@JS()
-@anonymous
-class P2PSettingConfig {
-  external factory P2PSettingConfig({Function getStats});
 }
 
 class ErrorData {

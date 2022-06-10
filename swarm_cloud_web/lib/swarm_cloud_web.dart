@@ -28,10 +28,55 @@ class SwarmCloudWeb extends SwarmCloudPlatform {
     SegmentIdGenerator? segmentIdGenerator,
   }) async {
     SwarmVideoPlayerPluginHls.hlsConfigBuilder = (headers) {
+      var p2pConfig = P2PSettingConfig(
+        getStats: infoListener == null
+            ? null
+            : allowInterop(
+                (
+                  totalP2PDownloaded,
+                  totalP2PUploaded,
+                  totalHTTPDownloaded,
+                  p2pDownloadSpeed,
+                ) {
+                  var data = {
+                    "totalHTTPDownloaded": totalHTTPDownloaded,
+                    "totalP2PDownloaded": totalP2PDownloaded,
+                    "totalP2PUploaded": totalP2PUploaded,
+                    "p2pDownloadSpeed": p2pDownloadSpeed,
+                  };
+                  infoListener.call(data);
+                },
+              ),
+        segmentId: segmentIdGenerator == null
+            ? null
+            : allowInterop((
+                String streamId,
+                int sn,
+                String segmentUrl,
+                String? range,
+              ) {
+                return segmentIdGenerator.call(
+                  streamId,
+                  sn,
+                  segmentUrl,
+                  range,
+                );
+              }),
+      );
+      p2pConfig.token = token;
+      p2pConfig.logLevel =
+          ["none", "debug", "info", "warn", "error"][config.logLevel.index];
+      p2pConfig.webRTCConfig = config.webRTCConfig;
+      p2pConfig.announce = config.announce;
+      p2pConfig.memoryCacheLimit = config.memoryCacheLimit;
+      p2pConfig.p2pEnabled = config.p2pEnabled;
+      p2pConfig.useHttpRange = config.useHttpRange;
+      p2pConfig.httpLoadTime = config.httpLoadTime;
+      p2pConfig.sharePlaylist = config.sharePlaylist;
+
       var hlsConfig = P2PHlsConfig(
         xhrSetup: allowInterop(
           (HttpRequest xhr, String _) {
-            window.console.warn('P2PHlsConfig xhrSetup');
             if (headers.isEmpty) return;
             if (headers.containsKey('useCookies')) xhr.withCredentials = true;
             headers.forEach((String key, String value) {
@@ -39,51 +84,8 @@ class SwarmCloudWeb extends SwarmCloudPlatform {
             });
           },
         ),
-        p2pConfig: P2PSettingConfig(
-          getStats: allowInterop(
-            (data, data2, data3, data4) {
-              window.console.warn('infoListener Start');
-              window.console.warn([data, data2, data3, data4]);
-              window.console.warn('infoListener End');
-              // infoListener?.call(map);
-            },
-          ),
-        ),
+        p2pConfig: p2pConfig,
       );
-      window.console.error('hlsConfig');
-      window.console.error(hlsConfig);
-      hlsConfig.token = token;
-      hlsConfig.logLevel =
-          ["none", "debug", "info", "warn", "error"][config.logLevel.index];
-      hlsConfig.webRTCConfig = config.webRTCConfig;
-      hlsConfig.announce = config.announce;
-      hlsConfig.memoryCacheLimit = config.memoryCacheLimit;
-      hlsConfig.p2pEnabled = config.p2pEnabled;
-      hlsConfig.useHttpRange = config.useHttpRange;
-      hlsConfig.httpLoadTime = config.httpLoadTime;
-      hlsConfig.sharePlaylist = config.sharePlaylist;
-
-      // infoListener
-      // if (infoListener != null) {
-      //   hlsConfig.getStats = allowInterop((map) {
-      //     window.console.log('infoListener Start');
-      //     window.console.log(map);
-      //     window.console.log('infoListener End');
-      //     infoListener(map);
-      //   });
-      // }
-
-      // segmentIdGenerator
-      if (segmentIdGenerator != null) {
-        hlsConfig.segmentId = allowInterop((e) {
-          return segmentIdGenerator(
-            e["streamId"],
-            e["sn"],
-            e["segmentUrl"],
-            e["range"],
-          );
-        });
-      }
       return hlsConfig;
     };
     return 0;

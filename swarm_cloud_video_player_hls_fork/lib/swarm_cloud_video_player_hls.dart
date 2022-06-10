@@ -270,11 +270,6 @@ class _VideoPlayer {
         _hls!.on('hlsMediaAttached', allowInterop((dynamic _, dynamic __) {
           _hls!.loadSource(uri.toString());
         }));
-        // _hls!.p2pEngine.on('stats', allowInterop((a) {
-        //   window.console.warn('_hls!.p2pEngine.on(stats');
-        //   window.console.warn(a);
-        //   window.console.warn('------------------------');
-        // }));
         _hls!.on('hlsError', allowInterop((dynamic _, dynamic data) {
           final ErrorData _data = ErrorData(data);
           if (_data.fatal) {

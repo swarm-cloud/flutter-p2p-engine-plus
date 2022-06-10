@@ -58,7 +58,6 @@ class _HomePageState extends State<HomePage> {
           logLevel: P2pLogLevel.debug,
         ),
         infoListener: (info) {
-          window.console.log(info);
           print('p2p listen: $info');
         },
         segmentIdGenerator: (
@@ -79,7 +78,7 @@ class _HomePageState extends State<HomePage> {
         });
       _controller.setVolume(0.0);
     } catch (e) {
-      print(e);
+      print('Init Error $e');
     }
     // print('Swarm Cloud Version: $engineVersion');
   }
