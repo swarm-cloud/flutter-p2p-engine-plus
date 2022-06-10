@@ -25,7 +25,8 @@ class SwarmCloudWeb extends SwarmCloudPlatform {
     token, {
     required P2pConfig config,
     CdnByeInfoListener? infoListener,
-    SegmentIdGenerator? segmentIdGenerator,
+    SegmentIdGenerator? segmentIdGenerator, // 给SDK提供segmentId
+    bool bufferedDurationGeneratorEnable = false, // 是否可以给SDK提供缓冲前沿到当前播放时间的差值
   }) async {
     SwarmVideoPlayerPluginHls.hlsConfigBuilder = (headers) {
       var p2pConfig = P2PSettingConfig(

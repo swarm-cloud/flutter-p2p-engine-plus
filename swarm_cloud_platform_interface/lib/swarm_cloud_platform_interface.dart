@@ -64,21 +64,28 @@ class SwarmCloudPlatform extends PlatformInterface {
     token, {
     required P2pConfig config,
     CdnByeInfoListener? infoListener,
-    SegmentIdGenerator? segmentIdGenerator,
+    SegmentIdGenerator? segmentIdGenerator, // 给SDK提供segmentId
+    bool bufferedDurationGeneratorEnable = false, // 是否可以给SDK提供缓冲前沿到当前播放时间的差值
   }) =>
       _instance.init(
         token,
         config: config,
         infoListener: infoListener,
         segmentIdGenerator: segmentIdGenerator,
+        bufferedDurationGeneratorEnable: bufferedDurationGeneratorEnable,
       );
 
   /// Get parsed local stream url by passing the original stream url(m3u8) to CBP2pEngine instance.
   Future<String?> parseStreamURL(
-    String sourceUrl, [
+    String sourceUrl, {
     String? videoId,
-  ]) =>
-      _instance.parseStreamURL(sourceUrl, videoId);
+    Duration Function()? bufferedDurationGenerator,
+  }) =>
+      _instance.parseStreamURL(
+        sourceUrl,
+        videoId: videoId,
+        bufferedDurationGenerator: bufferedDurationGenerator,
+      );
 
   /// Get the connection state of p2p engine. 获取P2P Engine的连接状态
   Future<bool> isConnected() => _instance.isConnected();
@@ -93,76 +100,6 @@ class SwarmCloudPlatform extends PlatformInterface {
   Future<String> getPeerId() => _instance.getPeerId();
 }
 
-class MethodChannelShare extends SwarmCloudPlatform {
-  /// [MethodChannel] used to communicate with the platform side.
-  @visibleForTesting
-  static const MethodChannel channel = MethodChannel('com.swarmcloud');
-
-  /// Create a new instance with token and the specified config.
-  Future<int> init(
-    token, {
-    required P2pConfig config,
-    CdnByeInfoListener? infoListener,
-    SegmentIdGenerator? segmentIdGenerator,
-  }) async {
-    final int? success = await channel.invokeMethod('init', {
-      'token': token,
-      'config': config.toMap,
-    });
-    if (infoListener != null) {
-      await channel.invokeMethod('startListen');
-    }
-    channel.setMethodCallHandler((call) async {
-      if (call.method == 'info') {
-        var map = Map<String, dynamic>.from(call.arguments);
-        infoListener?.call(map);
-      } else if (call.method == 'segmentId') {
-        var data = SafeMap(call.arguments);
-        return {
-          'result': (segmentIdGenerator ?? defaultSegmentIdGenerator).call(
-                data['streamId'].string ?? "",
-                data['sn'].intValue ?? 0,
-                data['segmentUrl'].string ?? "",
-                data['range'].string,
-              ) ??
-              call.arguments['url'],
-        };
-      }
-      return {"success": true};
-    });
-    if (success == null) {
-      throw 'Not Avaliable Result: $success. Init fail.';
-    }
-    return success;
-  }
-
-  /// Get parsed local stream url by passing the original stream url(m3u8) to CBP2pEngine instance.
-  Future<String?> parseStreamURL(
-    String sourceUrl, [
-    String? videoId,
-  ]) async {
-    final String? url = await channel.invokeMethod('parseStreamURL', {
-      'url': sourceUrl,
-      'videoId': videoId ?? sourceUrl,
-    });
-    return url;
-  }
-
-  /// Get the connection state of p2p engine. 获取P2P Engine的连接状态
-  Future<bool> isConnected() async =>
-      (await channel.invokeMethod('isConnected')) == true;
-
-  /// Restart p2p engine.
-  Future<void> restartP2p() => channel.invokeMethod('restartP2p');
-
-  /// Stop p2p and free used resources.
-  Future<void> stopP2p() => channel.invokeMethod('stopP2p');
-
-  /// Get the peer ID of p2p engine. 获取P2P Engine的peer ID
-  Future<String> getPeerId() async =>
-      (await channel.invokeMethod('getPeerId')) ?? 'Unknown peer Id';
-}
-
 /// Print log level.
 enum P2pLogLevel {
   none,
@@ -170,6 +107,13 @@ enum P2pLogLevel {
   info,
   warn,
   error,
+}
+
+/// tracker服务器地址所在国家的枚举
+enum AnnounceLocation {
+  China,
+  HongKong,
+  USA,
 }
 
 /// The configuration of p2p engine.
@@ -223,38 +167,40 @@ class P2pConfig {
   final Map<String, String>? httpHeaders;
 
   /// 如果使用自定义的channelId，则此字段必须设置，且长度必须在5到15个字符之间，建议设置成你所在组织的唯一标识
-  final String? channelIdPrefix;
+  // final String? channelIdPrefix;
 
   /// 如果运行于机顶盒请设置成true
   final bool isSetTopBox;
 
-  /// SDK新增
   /// P2P下载超时后留给HTTP下载的时间(ms)
   final int httpLoadTime;
 
-  /// SDK新增
   /// 是否允许m3u8文件的P2P传输
   final bool sharePlaylist;
 
-  /// SDK新增
   /// 是否将日志持久化到外部存储
   final bool logPersistent;
 
-  /// SDK新增, iOS特有
+  /// iOS特有
   /// 日志文件的存储路径，默认路径是 Library/Caches/Logs/
   final String? logFilePathInIos;
 
-  /// SDK新增, Android特有
+  /// Android特有
   /// 优先尝试从对等端下载前几片数据，可以提高P2P比例，但可能会增加起播延时
   final bool waitForPeerInAndroid;
 
-  /// SDK新增, Android特有
+  /// Android特有
   /// waitForPeer的超时时间，超时后恢复从http下载(ms)
   final int waitForPeerTimeoutInAndroid;
 
-  /// SDK新增, Android特有
-  /// waitForPeer的超时时间，超时后恢复从http下载(ms)
+  /// 扩展支持的HLS媒体文件
   final List<String> hlsMediaFiles;
+
+  /// tracker服务器地址所在国家
+  final AnnounceLocation? announceLocation;
+
+  /// 自定义扩展支持的HLS媒体文件
+  final List<String>? hlsMediaFileExtensions;
 
   P2pConfig({
     this.logLevel: P2pLogLevel.warn,
@@ -273,9 +219,7 @@ class P2pConfig {
     this.useHttpRange: true,
     this.wifiOnly: false,
     this.httpHeaders,
-    this.channelIdPrefix,
     this.isSetTopBox: false,
-    // 新增的几个属性
     this.httpLoadTime: 2000,
     this.logPersistent: false,
     this.sharePlaylist: false,
@@ -283,6 +227,9 @@ class P2pConfig {
     this.waitForPeerTimeoutInAndroid: 4500,
     this.hlsMediaFiles: const ["ts", "mp4", "m4s"],
     this.logFilePathInIos,
+    // 新
+    this.announceLocation,
+    this.hlsMediaFileExtensions,
   });
 
   P2pConfig.byDefault() : this();
@@ -304,9 +251,7 @@ class P2pConfig {
         'useHttpRange': useHttpRange,
         'wifiOnly': wifiOnly,
         'httpHeaders': httpHeaders ?? {},
-        'channelIdPrefix': channelIdPrefix,
         'isSetTopBox': isSetTopBox,
-        // new
         'httpLoadTime': httpLoadTime,
         'sharePlaylist': sharePlaylist,
         'logPersistent': logPersistent,
@@ -314,5 +259,8 @@ class P2pConfig {
         'waitForPeer': waitForPeerInAndroid,
         'waitForPeerTimeout': waitForPeerTimeoutInAndroid,
         'hlsMediaFiles': hlsMediaFiles,
+        // new
+        'announceLocation': announceLocation?.index,
+        'hlsMediaFileExtensions': hlsMediaFileExtensions,
       };
 }

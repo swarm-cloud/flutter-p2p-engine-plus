@@ -12,26 +12,35 @@ class SwarmCloudChannel extends SwarmCloudPlatform {
     return version ?? 'Unknown Version';
   }
 
+  static Duration Function()? _bufferedDurationGenerator;
+
+  static bool _bufferedDurationGeneratorEnable = false;
+
   /// Create a new instance with token and the specified config.
-  @override
   Future<int> init(
     token, {
     required P2pConfig config,
     CdnByeInfoListener? infoListener,
-    SegmentIdGenerator? segmentIdGenerator,
+    SegmentIdGenerator? segmentIdGenerator, // 给SDK提供segmentId
+    bool bufferedDurationGeneratorEnable = false, // 是否可以给SDK提供缓冲前沿到当前播放时间的差值
   }) async {
+    _bufferedDurationGeneratorEnable = bufferedDurationGeneratorEnable;
     final int? success = await _channel.invokeMethod('init', {
       'token': token,
       'config': config.toMap,
+      'enableSegmentIdGenerator': segmentIdGenerator != null,
+      'enableBufferedDurationGenerator': bufferedDurationGeneratorEnable,
     });
     if (infoListener != null) {
       await _channel.invokeMethod('startListen');
     }
+
     _channel.setMethodCallHandler((call) async {
       if (call.method == 'info') {
         var map = Map<String, dynamic>.from(call.arguments);
         infoListener?.call(map);
       } else if (call.method == 'segmentId') {
+        /// SegmentIdGenerator
         var data = SafeMap(call.arguments);
         return {
           'result': (segmentIdGenerator ?? defaultSegmentIdGenerator).call(
@@ -42,9 +51,13 @@ class SwarmCloudChannel extends SwarmCloudPlatform {
               ) ??
               call.arguments['url'],
         };
+      } else if (call.method == 'bufferedDuration') {
+        var duration = _bufferedDurationGenerator?.call();
+        return {'result': duration?.inSeconds ?? -1};
       }
       return {"success": true};
     });
+
     if (success == null) {
       throw 'Not Avaliable Result: $success. Init fail.';
     }
@@ -52,11 +65,19 @@ class SwarmCloudChannel extends SwarmCloudPlatform {
   }
 
   /// Get parsed local stream url by passing the original stream url(m3u8) to CBP2pEngine instance.
-  @override
   Future<String?> parseStreamURL(
-    String sourceUrl, [
+    String sourceUrl, {
     String? videoId,
-  ]) async {
+    Duration Function()? bufferedDurationGenerator,
+  }) async {
+    if (_bufferedDurationGeneratorEnable && bufferedDurationGenerator == null) {
+      throw 'Must provide bufferedDurationGenerator if bufferedDurationGeneratorEnable was set true';
+    }
+    if (!_bufferedDurationGeneratorEnable &&
+        bufferedDurationGenerator != null) {
+      throw 'Must set bufferedDurationGeneratorEnable true before set bufferedDurationGenerator';
+    }
+    _bufferedDurationGenerator = bufferedDurationGenerator;
     final String? url = await _channel.invokeMethod('parseStreamURL', {
       'url': sourceUrl,
       'videoId': videoId ?? sourceUrl,
