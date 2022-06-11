@@ -8,6 +8,7 @@ import 'dart:async';
 import 'package:swarm_cloud_platform_interface/swarm_cloud_platform_interface.dart';
 export 'package:swarm_cloud_platform_interface/swarm_cloud_platform_interface.dart'
     hide SwarmCloudPlatform;
+
 class SwarmCloud {
   static SwarmCloudPlatform get _platform => SwarmCloudPlatform.instance;
 
@@ -27,10 +28,15 @@ class SwarmCloud {
 
   /// Get parsed local stream url by passing the original stream url(m3u8) to CBP2pEngine instance.
   static Future<String?> parseStreamURL(
-    String sourceUrl, [
+    String sourceUrl, {
     String? videoId,
-  ]) =>
-      _platform.parseStreamURL(sourceUrl, videoId);
+    Duration Function()? bufferedDurationGenerator,
+  }) =>
+      _platform.parseStreamURL(
+        sourceUrl,
+        videoId: videoId,
+        bufferedDurationGenerator: bufferedDurationGenerator,
+      );
 
   /// Get the connection state of p2p engine. 获取P2P Engine的连接状态
   static Future<bool> isConnected() => _platform.isConnected();

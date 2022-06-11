@@ -1,6 +1,6 @@
-import 'dart:html';
-
+import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
+import 'package:safemap/safemap.dart';
 import 'package:swarm_cloud/swarm_cloud.dart';
 import 'package:swarm_cloud_example/style/color.dart';
 import 'package:swarm_cloud_example/views/confirm.dart';
@@ -50,6 +50,11 @@ class _HomePageState extends State<HomePage> {
   var urlResult = "";
   var token = 'ZMuO5qHZg';
 
+  var totalHTTPDn = 0;
+  var totalP2PDn = 0;
+  var totalP2PUp = 0;
+  var p2pDownloadSpeed = 0;
+
   init() async {
     try {
       await SwarmCloud.init(
@@ -59,6 +64,18 @@ class _HomePageState extends State<HomePage> {
         ),
         infoListener: (info) {
           print('p2p listen: $info');
+          setState(() {
+            if (kIsWeb) {
+              totalHTTPDn = SafeMap(info)["totalHTTPDownloaded"].intOrZero;
+              totalP2PDn = SafeMap(info)["totalP2PDownloaded"].intOrZero;
+              totalP2PUp = SafeMap(info)["totalP2PUploaded"].intOrZero;
+              p2pDownloadSpeed = SafeMap(info)["p2pDownloadSpeed"].intOrZero;
+            } else {
+              totalHTTPDn += SafeMap(info)["httpDownloaded"].intOrZero;
+              totalP2PDn += SafeMap(info)["p2pDownloaded"].intOrZero;
+              totalP2PUp += SafeMap(info)["p2pUploaded"].intOrZero;
+            }
+          });
         },
         segmentIdGenerator: (
           String streamId,
@@ -82,6 +99,8 @@ class _HomePageState extends State<HomePage> {
     }
     // print('Swarm Cloud Version: $engineVersion');
   }
+
+  bool showDetail = false;
 
   @override
   void dispose() {
@@ -115,11 +134,11 @@ class _HomePageState extends State<HomePage> {
               bottom: 20,
               child: Container(
                 padding: const EdgeInsets.symmetric(
-                  horizontal: 12,
-                  vertical: 4,
+                  horizontal: 8,
+                  vertical: 2,
                 ),
                 decoration: BoxDecoration(
-                  color: Colors.blue.withOpacity(0.5),
+                  color: Colors.blue.withOpacity(0.8),
                   borderRadius: BorderRadius.circular(6),
                 ),
                 constraints: const BoxConstraints(
@@ -128,70 +147,111 @@ class _HomePageState extends State<HomePage> {
                 child: DefaultTextStyle(
                   style: const TextStyle(
                     color: Colors.white,
-                    fontWeight: FontWeight.bold,
+                    fontWeight: FontWeight.normal,
+                    fontSize: 10,
                   ),
                   child: Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      Flexible(
-                        child: Column(
-                          mainAxisSize: MainAxisSize.min,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text('Url:$url'),
-                            Text('UrlResult:$urlResult'),
-                            Text('Token:$token'),
-                          ],
-                        ),
-                      ),
-                      Tapped(
-                        onTap: () async {
-                          var res = await editUrlAndToken(context);
-                        },
-                        child: Container(
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 6,
-                            vertical: 12,
-                          ),
-                          child: const Icon(
-                            Icons.edit,
-                            color: Colors.white,
-                          ),
-                        ),
-                      ),
-                      Tapped(
-                        onTap: () {},
-                        child: Container(
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 6,
-                            vertical: 12,
-                          ),
-                          child: const Icon(
-                            Icons.arrow_back,
-                            color: Colors.white,
-                          ),
-                        ),
-                      ),
-                      Tapped(
-                        onTap: () {
-                          setState(() {
-                            _controller.value.isPlaying
-                                ? _controller.pause()
-                                : _controller.play();
-                          });
-                        },
-                        child: Container(
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 6,
-                            vertical: 12,
-                          ),
-                          child: Icon(
-                            _controller.value.isPlaying
-                                ? Icons.pause
-                                : Icons.play_arrow,
-                            color: Colors.white,
+                      if (showDetail)
+                        Flexible(
+                          child: Container(
+                            padding: const EdgeInsets.symmetric(
+                              vertical: 4,
+                            ),
+                            child: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Container(
+                                  padding: const EdgeInsets.symmetric(
+                                    vertical: 2,
+                                  ),
+                                  child: Text('Token:$token'),
+                                ),
+                                Container(
+                                  padding: const EdgeInsets.symmetric(
+                                    vertical: 2,
+                                  ),
+                                  child: Text('Url:$url'),
+                                ),
+                                Container(
+                                  padding: const EdgeInsets.symmetric(
+                                    vertical: 2,
+                                  ),
+                                  child: Text(
+                                    [
+                                      'TotalHTTPDownloaded:$totalHTTPDn',
+                                      'TotalP2PDownloaded:$totalP2PDn',
+                                      'TotalP2PUploaded:$totalP2PUp',
+                                      'P2pDownloadSpeed:$p2pDownloadSpeed',
+                                    ].join('\n'),
+                                  ),
+                                ),
+                              ],
+                            ),
                           ),
                         ),
+                      Column(
+                        children: [
+                          Tapped(
+                            onTap: () {
+                              setState(() {
+                                showDetail = !showDetail;
+                              });
+                            },
+                            child: Container(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 6,
+                                vertical: 12,
+                              ),
+                              child: Icon(
+                                showDetail ? Icons.clear : Icons.info_outline,
+                                color: Colors.white,
+                                size: 20,
+                              ),
+                            ),
+                          ),
+                          Tapped(
+                            onTap: () {
+                              setState(() {
+                                _controller.value.isPlaying
+                                    ? _controller.pause()
+                                    : _controller.play();
+                              });
+                            },
+                            child: Container(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 6,
+                                vertical: 12,
+                              ),
+                              child: Icon(
+                                _controller.value.isPlaying
+                                    ? Icons.pause
+                                    : Icons.play_arrow,
+                                color: Colors.white,
+                                size: 20,
+                              ),
+                            ),
+                          ),
+                          if (showDetail)
+                            Tapped(
+                              onTap: () async {
+                                // var res = await editUrlAndToken(context);
+                              },
+                              child: Container(
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 6,
+                                  vertical: 12,
+                                ),
+                                child: const Icon(
+                                  Icons.edit,
+                                  color: Colors.white,
+                                  size: 20,
+                                ),
+                              ),
+                            ),
+                        ],
                       ),
                     ],
                   ),

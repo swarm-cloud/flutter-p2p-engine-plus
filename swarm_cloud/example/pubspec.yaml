@@ -36,13 +36,13 @@ dev_dependencies:
     sdk: flutter
   flutter_lints: ^1.0.0
 
-dependency_overrides:
-  swarm_cloud_platform_interface:
-    path: ../../swarm_cloud_platform_interface/
-  video_player_web_hls_swarm_cloud:
-    path: ../../swarm_cloud_video_player_hls_fork/
-  swarm_cloud_web:
-    path: ../../swarm_cloud_web/
+# dependency_overrides:
+#   swarm_cloud_platform_interface:
+#     path: ../../swarm_cloud_platform_interface/
+#   video_player_web_hls_swarm_cloud:
+#     path: ../../swarm_cloud_video_player_hls_fork/
+#   swarm_cloud_web:
+#     path: ../../swarm_cloud_web/
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

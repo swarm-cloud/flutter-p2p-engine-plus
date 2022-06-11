@@ -11,6 +11,7 @@
 		54006A947DCE8B74AF396F30 /* Pods_Runner.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CEA116683B222CD4A0F7117B /* Pods_Runner.framework */; };
 		57C5A4CA284F57BB00FBE287 /* AppFrameworkInfo.plist in Resources */ = {isa = PBXBuildFile; fileRef = 3B3967151E833CAA004F5970 /* AppFrameworkInfo.plist */; };
 		57DF7A482844F0EF00C0E4E8 /* SwarmCloudSDK.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 57CD205E283E67010006471E /* SwarmCloudSDK.xcframework */; };
+		57E4787E2854969700406EA4 /* swarm_cloud.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 57E4787D2854969700406EA4 /* swarm_cloud.framework */; };
 		74858FAF1ED2DC5600515810 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74858FAE1ED2DC5600515810 /* AppDelegate.swift */; };
 		97C146FC1CF9000F007C117D /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 97C146FA1CF9000F007C117D /* Main.storyboard */; };
 		97C146FE1CF9000F007C117D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 97C146FD1CF9000F007C117D /* Assets.xcassets */; };
@@ -39,6 +40,7 @@
 		57CD205C283E66FD0006471E /* swarm_cloud_ios.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = swarm_cloud_ios.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		57CD205E283E67010006471E /* SwarmCloudSDK.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = SwarmCloudSDK.xcframework; path = Pods/SwarmCloudSDK/SwarmCloudSDK.xcframework; sourceTree = "<group>"; };
 		57CD2060283E67220006471E /* swarm_cloud_ios.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = swarm_cloud_ios.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		57E4787D2854969700406EA4 /* swarm_cloud.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = swarm_cloud.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		74858FAD1ED2DC5600515810 /* Runner-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Runner-Bridging-Header.h"; sourceTree = "<group>"; };
 		74858FAE1ED2DC5600515810 /* AppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		7AFA3C8E1D35360C0083082E /* Release.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; name = Release.xcconfig; path = Flutter/Release.xcconfig; sourceTree = "<group>"; };
@@ -60,6 +62,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				57DF7A482844F0EF00C0E4E8 /* SwarmCloudSDK.xcframework in Frameworks */,
+				57E4787E2854969700406EA4 /* swarm_cloud.framework in Frameworks */,
 				54006A947DCE8B74AF396F30 /* Pods_Runner.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -125,6 +128,7 @@
 		BB4E01E782CCE9DE5ADC7E95 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				57E4787D2854969700406EA4 /* swarm_cloud.framework */,
 				573498B72844E9B600BAFB04 /* swarm_cloud.framework */,
 				57CD2060283E67220006471E /* swarm_cloud_ios.framework */,
 				57CD205E283E67010006471E /* SwarmCloudSDK.xcframework */,
@@ -369,6 +373,7 @@
 				DEVELOPMENT_TEAM = KB3VL7FV75;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = Runner/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -500,6 +505,7 @@
 				DEVELOPMENT_TEAM = KB3VL7FV75;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = Runner/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -526,6 +532,7 @@
 				DEVELOPMENT_TEAM = KB3VL7FV75;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = Runner/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",

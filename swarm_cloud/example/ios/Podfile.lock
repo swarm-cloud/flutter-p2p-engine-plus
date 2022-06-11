@@ -21,8 +21,8 @@ PODS:
   - SocketRocket (0.6.0)
   - swarm_cloud (0.0.1):
     - Flutter
-    - SwarmCloudSDK (= 2.4.1)
-  - SwarmCloudSDK (2.4.1):
+    - SwarmCloudSDK (= 2.5.0)
+  - SwarmCloudSDK (2.5.0):
     - CocoaAsyncSocket (~> 7.6)
     - CocoaLumberjack (~> 3.7)
     - GCDWebServer (~> 3.5)
@@ -69,10 +69,10 @@ SPEC CHECKSUMS:
   PINCache: 7a8fc1a691173d21dbddbf86cd515de6efa55086
   PINOperation: 00c935935f1e8cf0d1e2d6b542e75b88fc3e5e20
   SocketRocket: fccef3f9c5cedea1353a9ef6ada904fde10d6608
-  swarm_cloud: e46ae560bfcd64d1bf963445842e619ca5f0fedd
-  SwarmCloudSDK: b5388812560a9454f54c722719170dc33a8c76aa
+  swarm_cloud: f1bcfc34ae3c53bab9decf6e08d73edd85d9c478
+  SwarmCloudSDK: db157d67002b560cc929f37e9d8a047691d7f519
   video_player_avfoundation: e489aac24ef5cf7af82702979ed16f2a5ef84cff
 
-PODFILE CHECKSUM: eeff250f62f1beb01b2eb92e19298c5043aa206d
+PODFILE CHECKSUM: 877549d60dc5f0566810f88c974bc91e58ee24c7
 
 COCOAPODS: 1.11.3

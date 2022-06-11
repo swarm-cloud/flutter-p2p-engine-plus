@@ -18,7 +18,7 @@ A new flutter plugin project.
   s.dependency 'Flutter'
 
   # s.dependency 'WebRTCDatachannel', '0.0.1'
-  s.dependency 'SwarmCloudSDK', '2.4.1'
+  s.dependency 'SwarmCloudSDK', '2.5.0'
   
   s.platform = :ios, '12.0'
 
