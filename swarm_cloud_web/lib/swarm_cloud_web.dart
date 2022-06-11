@@ -127,7 +127,6 @@ class SwarmCloudWeb extends SwarmCloudPlatform {
   /// Get the peer ID of p2p engine. 获取P2P Engine的peer ID
   @override
   Future<String> getPeerId() async {
-    // TODO: getPeerId
-    return '';
+    throw 'getPeerId not avaliable on web platform';
   }
 }
