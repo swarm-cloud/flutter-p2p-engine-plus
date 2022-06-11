@@ -95,9 +95,13 @@ class SwarmCloudWeb extends SwarmCloudPlatform {
   /// Get parsed local stream url by passing the original stream url(m3u8) to CBP2pEngine instance.
   @override
   Future<String?> parseStreamURL(
-    String sourceUrl, [
+    String sourceUrl, {
     String? videoId,
-  ]) async {
+    Duration Function()? bufferedDurationGenerator,
+  }) async {
+    if (bufferedDurationGenerator != null) {
+      throw 'bufferedDurationGenerator not avaliable on web platform';
+    }
     return sourceUrl;
   }
 
@@ -110,15 +114,14 @@ class SwarmCloudWeb extends SwarmCloudPlatform {
   /// Restart p2p engine.
   @override
   Future<void> restartP2p() async {
-    // TODO: restartP2p
-    // return false;
+    hls?.p2pEngine.disableP2P();
+    hls?.p2pEngine.enableP2P();
   }
 
   /// Stop p2p and free used resources.
   @override
   Future<void> stopP2p() async {
-    // TODO: stopP2p
-    // return false;
+    hls?.p2pEngine.disableP2P();
   }
 
   /// Get the peer ID of p2p engine. 获取P2P Engine的peer ID

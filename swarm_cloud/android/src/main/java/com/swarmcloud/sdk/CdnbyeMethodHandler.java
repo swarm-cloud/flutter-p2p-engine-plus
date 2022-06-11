@@ -29,6 +29,8 @@ public class CdnbyeMethodHandler implements MethodChannel.MethodCallHandler {
 
     private volatile String segmentId;
 
+    private volatile long bufferedDuration;
+
     private static CdnbyeMethodHandler instance;
 
     private MethodChannel channel;
@@ -66,11 +68,11 @@ public class CdnbyeMethodHandler implements MethodChannel.MethodCallHandler {
                 default:
                     level = LogLevel.DEBUG;
             }
-            boolean logEnabled = (int) configMap.get("logLevel") != 0;
+            boolean logEnabled = ((Number) configMap.get("logLevel")).longValue() != 0;
 
             P2pConfig.Builder builder = new P2pConfig.Builder()
                     .logEnabled(logEnabled).logLevel(level)
-                    .diskCacheLimit((int) configMap.get("diskCacheLimit"))
+                    .diskCacheLimit(((Number) configMap.get("diskCacheLimit")).longValue())
                     .memoryCacheCountLimit((int) configMap.get("memoryCacheCountLimit"))
                     .p2pEnabled((boolean) configMap.get("p2pEnabled"))
                     .downloadTimeout((int) configMap.get("downloadTimeout"), TimeUnit.SECONDS)
@@ -87,16 +89,13 @@ public class CdnbyeMethodHandler implements MethodChannel.MethodCallHandler {
             if(configMap.get("announce") != null)
                 builder = builder.announce((String) configMap.get("announce"));
 
-            if(configMap.get("channelIdPrefix") != null)
-                builder = builder.channelIdPrefix((String) configMap.get("channelIdPrefix"));
-
             if(configMap.get("tag") != null)
                 builder = builder.withTag((String) configMap.get("tag"));
 
             if(configMap.get("httpHeaders") != null)
                 builder = builder.httpHeadersForHls((Map<String, String>) configMap.get("httpHeaders"));
 
-            builder = builder.httpLoadTime((int) configMap.get("httpLoadTime"));
+            builder = builder.httpLoadTime(((Number) configMap.get("httpLoadTime")).longValue());
             builder = builder.logPersistent((boolean) configMap.get("logPersistent"));
             builder = builder.sharePlaylist((boolean) configMap.get("sharePlaylist"));
             builder = builder.waitForPeer((boolean) configMap.get("waitForPeer"));
@@ -105,57 +104,104 @@ public class CdnbyeMethodHandler implements MethodChannel.MethodCallHandler {
             if(configMap.get("hlsMediaFiles") != null)
                 builder = builder.hlsMediaFiles((ArrayList<String>) configMap.get("hlsMediaFiles"));
 
+            // new property
+            if(configMap.get("announceLocation") != null){
+                int index = ((Number) configMap.get("announceLocation")).intValue();
+                builder = builder.announceLocation(AnnounceLocation.values()[index]);
+            }
+
+            if(configMap.get("hlsMediaFileExtensions") != null)
+                builder = builder.hlsMediaFileExtensions((ArrayList<String>) configMap.get("hlsMediaFileExtensions"));
+
+
             P2pConfig config = builder.build();
             P2pEngine.init(activity.getApplication().getApplicationContext(), token, config);
 
-            P2pEngine.getInstance().setHlsSegmentIdGenerator(new HlsSegmentIdGenerator() {
-                @Override
-//                public String onSegmentId(int level, long sn, String urlString) {
-                public String onSegmentId(String streamId, long sn, String segmentUrl, String range) {
-                    segmentId = segmentUrl;
-                    Map<String, Object> args = new HashMap<>();
-                    args.put("sn", sn);
-                    args.put("segmentUrl", segmentUrl);
-                    args.put("streamId", streamId);
-                    args.put("range", range);
 
-                    CountDownLatch latch = new CountDownLatch(1);
-                    activity.runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            channel.invokeMethod("segmentId", args, new MethodChannel.Result() {
-                                @Override
-                                public void success(@Nullable Object result) {
-//                                    System.out.println("native result: " + result);
-                                    if (result != null) {
-                                        Map map = (Map<String, String>) result;
-                                        segmentId = (String) map.get("result");
-                                       System.out.println(segmentId);
+            if((boolean)arguments.get("enableBufferedDurationGenerator") == true)
+                P2pEngine.getInstance().setPlayerInteractor(new PlayerInteractor() {
+                    public long onBufferedDuration() {
+                        CountDownLatch latch = new CountDownLatch(1);
+                        activity.runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                channel.invokeMethod("bufferedDuration", null, new MethodChannel.Result() {
+                                    @Override
+                                    public void success(@Nullable Object result) {
+                                        if (result != null) {
+                                            Map map = (Map<String, String>) result;
+                                            bufferedDuration = ((Number) map.get("result")).longValue() * 1000;
+                                        }
+                                        latch.countDown();
                                     }
-                                    latch.countDown();
-                                }
 
-                                @Override
-                                public void error(String errorCode, @Nullable String errorMessage, @Nullable Object errorDetails) {
-                                    latch.countDown();
-                                }
+                                    @Override
+                                    public void error(String errorCode, @Nullable String errorMessage, @Nullable Object errorDetails) {
+                                        latch.countDown();
+                                    }
 
-                                @Override
-                                public void notImplemented() {
-                                    latch.countDown();
-                                }
-                            });
+                                    @Override
+                                    public void notImplemented() {
+                                        latch.countDown();
+                                    }
+                                });
+                            }
+                        });
+                        try {
+                            latch.await(100, TimeUnit.MILLISECONDS);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
                         }
-                    });
-                    try {
-                        latch.await(100, TimeUnit.MILLISECONDS);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
+                        return bufferedDuration;
                     }
-//                    System.out.println("native segmentId: " + segmentId);
-                    return segmentId;
-                }
-            });
+                });
+
+            if((boolean)arguments.get("enableSegmentIdGenerator") == true)
+                P2pEngine.getInstance().setHlsSegmentIdGenerator(new HlsSegmentIdGenerator() {
+                    @Override
+                    public String onSegmentId(String streamId, long sn, String segmentUrl, String range) {
+                        segmentId = segmentUrl;
+                        Map<String, Object> args = new HashMap<>();
+                        args.put("sn", sn);
+                        args.put("segmentUrl", segmentUrl);
+                        args.put("streamId", streamId);
+                        args.put("range", range);
+
+                        CountDownLatch latch = new CountDownLatch(1);
+                        activity.runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                channel.invokeMethod("segmentId", args, new MethodChannel.Result() {
+                                    @Override
+                                    public void success(@Nullable Object result) {
+                                        if (result != null) {
+                                            Map map = (Map<String, String>) result;
+                                            segmentId = (String) map.get("result");
+                                           System.out.println(segmentId);
+                                        }
+                                        latch.countDown();
+                                    }
+
+                                    @Override
+                                    public void error(String errorCode, @Nullable String errorMessage, @Nullable Object errorDetails) {
+                                        latch.countDown();
+                                    }
+
+                                    @Override
+                                    public void notImplemented() {
+                                        latch.countDown();
+                                    }
+                                });
+                            }
+                        });
+                        try {
+                            latch.await(100, TimeUnit.MILLISECONDS);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                        return segmentId;
+                    }
+                });
 
             result.success(1);
         } else if (call.method.equals("parseStreamURL")) {
@@ -197,9 +243,9 @@ public class CdnbyeMethodHandler implements MethodChannel.MethodCallHandler {
                 }
 
                 @Override
-                public void onP2pUploaded(final long value) {
+                public void onP2pUploaded(long l, int i) {
                     final Map info = new HashMap();
-                    info.put("p2pUploaded", value);
+                    info.put("onP2pUploaded", l);
                     activity.runOnUiThread(new Runnable() {
                         @Override
                         public void run() {

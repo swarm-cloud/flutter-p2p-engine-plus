@@ -1,6 +1,6 @@
 #import "CdnbyePlugin.h"
 #import "CBP2pConfig+FromDic.h"
-@interface CdnbyePlugin(){
+@interface CdnbyePlugin()<SWCP2pEngineDelegate>{
     FlutterMethodChannel* channel;
 }
 
@@ -38,31 +38,38 @@
       NSString *token = args[@"token"];
       [[SWCP2pEngine sharedInstance] startWithToken:token andP2pConfig:config];
       // NSLog(@"token:\n%@",token);
-
-      [SWCP2pEngine sharedInstance].segmentIdForHls = ^NSString * _Nonnull(NSString * _Nonnull streamId, NSNumber * _Nonnull sn, NSString * _Nonnull segmentUrl, SWCRange byteRange) {
-          NSDictionary *arguments = @{
-              @"streamId": streamId,
-              @"sn": sn,
-              @"segmentUrl": segmentUrl,
-          };
-          NSMutableDictionary *argumentsM = [NSMutableDictionary dictionaryWithDictionary:arguments];
-          if (byteRange.start == SWCNotFound) {
-              argumentsM[@"range"] = [NSNull null];
-          } else {
-              argumentsM[@"range"] = [CdnbyePlugin SWCRangeGetHeaderString:byteRange];
-          }
-          __block NSString *segmentId = segmentUrl;
-          dispatch_semaphore_t semaphore = dispatch_semaphore_create(0);
-          [self->channel invokeMethod:@"segmentId" arguments:argumentsM result:^(id  _Nullable result) {
-              if (result) {
-                  NSDictionary *map = (NSDictionary *)result;
-                  segmentId = (NSString *)map[@"result"];
+      NSNumber *enableSegmentIdGenerator = args[@"enableSegmentIdGenerator"];
+      if (enableSegmentIdGenerator.boolValue == true) {
+          [SWCP2pEngine sharedInstance].segmentIdForHls = ^NSString * _Nonnull(NSString * _Nonnull streamId, NSNumber * _Nonnull sn, NSString * _Nonnull segmentUrl, SWCRange byteRange) {
+              NSDictionary *arguments = @{
+                  @"streamId": streamId,
+                  @"sn": sn,
+                  @"segmentUrl": segmentUrl,
+              };
+              NSMutableDictionary *argumentsM = [NSMutableDictionary dictionaryWithDictionary:arguments];
+              if (byteRange.start == SWCNotFound) {
+                  argumentsM[@"range"] = [NSNull null];
+              } else {
+                  argumentsM[@"range"] = [CdnbyePlugin SWCRangeGetHeaderString:byteRange];
               }
-              dispatch_semaphore_signal(semaphore);
-          }];
-          dispatch_semaphore_wait(semaphore, dispatch_time(DISPATCH_TIME_NOW, 100 * NSEC_PER_MSEC));
-          return segmentId;
-      };
+              __block NSString *segmentId = segmentUrl;
+              dispatch_semaphore_t semaphore = dispatch_semaphore_create(0);
+              [self->channel invokeMethod:@"segmentId" arguments:argumentsM result:^(id  _Nullable result) {
+                  if (result) {
+                      NSDictionary *map = (NSDictionary *)result;
+                      segmentId = (NSString *)map[@"result"];
+                  }
+                  dispatch_semaphore_signal(semaphore);
+              }];
+              dispatch_semaphore_wait(semaphore, dispatch_time(DISPATCH_TIME_NOW, 100 * NSEC_PER_MSEC));
+              return segmentId;
+          };
+      }
+    
+      NSNumber *bufferedDuration = args[@"enableBufferedDurationGenerator"];
+      if (bufferedDuration.boolValue == true) {
+          [SWCP2pEngine sharedInstance].delegate = self;
+      }
 
       result(@1);
   }
@@ -122,4 +129,23 @@
       result(FlutterMethodNotImplemented);
   }
 }
+
+// 实现bufferedDuration方法，如果dart端没实现，这里也不会注册到代理
+-(NSTimeInterval)bufferedDuration{
+    __block NSNumber *interval = 0;
+    dispatch_semaphore_t semaphore = dispatch_semaphore_create(0);
+    [self->channel invokeMethod:@"bufferedDuration" arguments:@{} result:^(id  _Nullable result) {
+        if (result) {
+            NSDictionary *map = (NSDictionary *)result;
+            interval = (NSNumber *)map[@"result"];
+            if ([interval isEqual:[NSNull null]]) {
+                interval = @-1;
+            }
+        }
+        dispatch_semaphore_signal(semaphore);
+    }];
+    dispatch_semaphore_wait(semaphore, dispatch_time(DISPATCH_TIME_NOW, 100 * NSEC_PER_MSEC));
+    return interval.longValue;
+}
+
 @end

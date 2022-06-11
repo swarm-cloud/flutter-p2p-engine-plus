@@ -19,10 +19,7 @@
     
     if(![configMap[@"announce"] isKindOfClass:[NSNull class]])
         config.announce = (NSString *)configMap[@"announce"];
-    
-//    if(![configMap[@"channelIdPrefix"] isKindOfClass:[NSNull class]])
-//        config.channelIdPrefix = (NSString *)configMap[@"channelIdPrefix"];
-    
+
     if(![configMap[@"tag"] isKindOfClass:[NSNull class]])
         config.tag = (NSString *)configMap[@"tag"];
 
@@ -37,13 +34,19 @@
     config.maxPeerConnections = ((NSNumber *)configMap[@"maxPeerConnections"]).integerValue;
     config.useHttpRange = ((NSNumber *)configMap[@"useHttpRange"]).integerValue;
     config.wifiOnly = ((NSNumber *)configMap[@"wifiOnly"]).integerValue;
-    // 新增的属性
     config.httpLoadTime = ((NSNumber *)configMap[@"httpLoadTime"]).integerValue;
     config.sharePlaylist = ((NSNumber *)configMap[@"sharePlaylist"]).integerValue > 0;
     config.logPersistent = ((NSNumber *)configMap[@"logPersistent"]).integerValue > 0;
 
     if (![configMap[@"logFilePath"] isEqual:[NSNull null]])
         config.logFilePath = ((NSString *)configMap[@"logFilePath"]);
+    
+    // 2.3.1新增
+    if (![configMap[@"announceLocation"] isEqual:[NSNull null]])
+        config.announceLocation = ((NSNumber *)configMap[@"announceLocation"]).integerValue;
+    
+    if (![configMap[@"hlsMediaFileExtensions"] isEqual:[NSNull null]])
+        config.hlsMediaFileExtensions = ((NSArray *)configMap[@"hlsMediaFileExtensions"]);
     
     return config;
 }

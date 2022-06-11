@@ -36,6 +36,15 @@ class P2P {
 class P2PEngine {
   @JS()
   external void on(String event, Function callback);
+
+  @JS()
+  external void enableP2P();
+  
+  @JS()
+  external void disableP2P();
+  
+  @JS()
+  external void destroy();
 }
 
 @JS()

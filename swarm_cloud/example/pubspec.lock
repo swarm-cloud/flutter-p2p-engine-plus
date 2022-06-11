@@ -370,7 +370,7 @@ packages:
       path: "../../swarm_cloud_video_player_hls_fork"
       relative: true
     source: path
-    version: "0.1.2"
+    version: "0.1.3-test"
   win32:
     dependency: transitive
     description:

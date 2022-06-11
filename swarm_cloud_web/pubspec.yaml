@@ -1,6 +1,6 @@
 name: swarm_cloud_web
 description: Swarm Cloud SDK web platform.
-version: 0.0.3
+version: 0.3.0
 homepage:
 
 environment:
@@ -19,7 +19,7 @@ dependencies:
     sdk: flutter
   flutter_web_plugins:
     sdk: flutter
-  swarm_cloud_platform_interface: ^0.0.3
+  swarm_cloud_platform_interface: ^0.1.1
   video_player_web_hls_swarm_cloud: ^0.1.2
   js: ^0.6.3
   safemap: ^2.1.0
@@ -32,3 +32,5 @@ dev_dependencies:
 dependency_overrides:
   video_player_web_hls_swarm_cloud:
     path: ../swarm_cloud_video_player_hls_fork/
+  swarm_cloud_platform_interface:
+    path: ../swarm_cloud_platform_interface/

@@ -1,3 +1,6 @@
+## 0.1.1
+* UpdateAPI
+
 ## 0.1.0
 
 * Support event channel.

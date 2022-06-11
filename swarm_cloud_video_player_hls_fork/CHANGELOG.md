@@ -1,5 +1,5 @@
-## 0.1.3-test
-- Update hls properties.
+## 0.3.0
+- Init
 ## 0.1.2
 - Update hls properties.
 ## 0.1.1

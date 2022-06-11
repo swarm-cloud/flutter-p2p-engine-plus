@@ -189,6 +189,8 @@ class SwarmVideoPlayerPluginHls extends VideoPlayerPlatform {
   Future<void> setMixWithOthers(bool mixWithOthers) => Future<void>.value();
 }
 
+Hls? get hls => _VideoPlayer.hls;
+
 class _VideoPlayer {
   _VideoPlayer(
       {required this.uri, required this.textureId, required this.headers});
@@ -203,7 +205,7 @@ class _VideoPlayer {
   late VideoElement videoElement;
   bool isInitialized = false;
   bool isBuffering = false;
-  Hls? _hls;
+  static Hls? hls;
 
   void setBuffering(bool buffering) {
     if (isBuffering != buffering) {
@@ -265,12 +267,17 @@ class _VideoPlayer {
         (uri.toString().contains('m3u8') || await _testIfM3u8())) {
       try {
         var config = SwarmVideoPlayerPluginHls.hlsConfigBuilder.call(headers);
-        _hls = Hls(config);
-        _hls!.attachMedia(videoElement);
-        _hls!.on('hlsMediaAttached', allowInterop((dynamic _, dynamic __) {
-          _hls!.loadSource(uri.toString());
+        hls = Hls(config);
+        hls!.attachMedia(videoElement);
+        hls!.on('hlsMediaAttached', allowInterop((dynamic _, dynamic __) {
+          hls!.loadSource(uri.toString());
         }));
-        _hls!.on('hlsError', allowInterop((dynamic _, dynamic data) {
+        hls!.p2pEngine.on('peerId', allowInterop((dynamic _, dynamic __) {
+          hls!.loadSource(uri.toString());
+        }));
+        window.console.log("hls:");
+        window.console.log(hls);
+        hls!.on('hlsError', allowInterop((dynamic _, dynamic data) {
           final ErrorData _data = ErrorData(data);
           if (_data.fatal) {
             eventController.addError(PlatformException(
@@ -405,7 +412,8 @@ class _VideoPlayer {
   void dispose() {
     videoElement.removeAttribute('src');
     videoElement.load();
-    _hls?.stopLoad();
+    hls?.stopLoad();
+    hls = null;
   }
 
   List<DurationRange> _toDurationRange(TimeRanges buffered) {
