@@ -281,18 +281,18 @@ packages:
     source: path
     version: "0.3.1"
   swarm_cloud_platform_interface:
-    dependency: transitive
+    dependency: "direct overridden"
     description:
-      name: swarm_cloud_platform_interface
-      url: "https://pub.dartlang.org"
-    source: hosted
+      path: "../../swarm_cloud_platform_interface"
+      relative: true
+    source: path
     version: "0.3.0"
   swarm_cloud_web:
-    dependency: transitive
+    dependency: "direct overridden"
     description:
-      name: swarm_cloud_web
-      url: "https://pub.dartlang.org"
-    source: hosted
+      path: "../../swarm_cloud_web"
+      relative: true
+    source: path
     version: "0.3.1"
   tapped:
     dependency: "direct main"
@@ -365,11 +365,11 @@ packages:
     source: hosted
     version: "2.0.10"
   video_player_web_hls_swarm_cloud:
-    dependency: transitive
+    dependency: "direct overridden"
     description:
-      name: video_player_web_hls_swarm_cloud
-      url: "https://pub.dartlang.org"
-    source: hosted
+      path: "../../swarm_cloud_video_player_hls_fork"
+      relative: true
+    source: path
     version: "0.3.0"
   win32:
     dependency: transitive

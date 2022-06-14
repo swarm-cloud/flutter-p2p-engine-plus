@@ -36,7 +36,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  VideoPlayerController _controller = VideoPlayerController.network('');
+  VideoPlayerController? _controller;
 
   @override
   void initState() {
@@ -87,13 +87,16 @@ class _HomePageState extends State<HomePage> {
           return segmentUrl;
         },
       );
-      urlResult = await SwarmCloud.parseStreamURL(url) ?? url;
+      var res = await SwarmCloud.parseStreamURL(url);
+      urlResult = res ?? url;
+      print('urlResult $urlResult $res');
       setState(() {});
-      _controller = VideoPlayerController.network(urlResult)
-        ..initialize().then((_) {
-          setState(() {});
-        });
-      _controller.setVolume(0.0);
+      var ct = VideoPlayerController.network(urlResult);
+      await ct.initialize();
+      setState(() {
+        _controller = ct;
+        _controller?.setVolume(0.0);
+      });
     } catch (e) {
       print('Init Error $e');
     }
@@ -105,11 +108,12 @@ class _HomePageState extends State<HomePage> {
   @override
   void dispose() {
     super.dispose();
-    _controller.dispose();
+    _controller?.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
+    if (_controller == null) return Scaffold();
     return Scaffold(
       backgroundColor: ColorPlate.lightGray,
       body: Center(
@@ -117,10 +121,10 @@ class _HomePageState extends State<HomePage> {
           alignment: Alignment.bottomLeft,
           children: [
             Center(
-              child: _controller.value.isInitialized
+              child: _controller!.value.isInitialized
                   ? AspectRatio(
-                      aspectRatio: _controller.value.aspectRatio,
-                      child: VideoPlayer(_controller),
+                      aspectRatio: _controller!.value.aspectRatio,
+                      child: VideoPlayer(_controller!),
                     )
                   : AspectRatio(
                       aspectRatio: 16 / 9,
@@ -215,9 +219,9 @@ class _HomePageState extends State<HomePage> {
                           Tapped(
                             onTap: () {
                               setState(() {
-                                _controller.value.isPlaying
-                                    ? _controller.pause()
-                                    : _controller.play();
+                                _controller!.value.isPlaying
+                                    ? _controller?.pause()
+                                    : _controller?.play();
                               });
                             },
                             child: Container(
@@ -226,7 +230,7 @@ class _HomePageState extends State<HomePage> {
                                 vertical: 12,
                               ),
                               child: Icon(
-                                _controller.value.isPlaying
+                                _controller!.value.isPlaying
                                     ? Icons.pause
                                     : Icons.play_arrow,
                                 color: Colors.white,

@@ -44,7 +44,7 @@
     // 2.3.1新增
     if (![configMap[@"announceLocation"] isEqual:[NSNull null]])
         config.announceLocation = ((NSNumber *)configMap[@"announceLocation"]).integerValue;
-    
+
     if (![configMap[@"hlsMediaFileExtensions"] isEqual:[NSNull null]])
         config.hlsMediaFileExtensions = ((NSArray *)configMap[@"hlsMediaFileExtensions"]);
     
