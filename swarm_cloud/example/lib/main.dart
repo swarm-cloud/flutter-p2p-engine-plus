@@ -241,7 +241,19 @@ class _HomePageState extends State<HomePage> {
                           if (showDetail)
                             Tapped(
                               onTap: () async {
-                                // var res = await editUrlAndToken(context);
+                                var res = await editUrlAndToken(
+                                  context,
+                                  url: url,
+                                  token: token,
+                                );
+                                var _token = res?.asMap()[0];
+                                var _url = res?.asMap()[0];
+                                if (_token != null && _url != null) {
+                                  token = _token;
+                                  url = url;
+                                  setState(() {});
+                                  init();
+                                }
                               },
                               child: Container(
                                 padding: const EdgeInsets.symmetric(
@@ -270,7 +282,7 @@ class _HomePageState extends State<HomePage> {
 }
 
 /// 输入文本，可以通过onWillConfirm方法检查
-Future<String?> editUrlAndToken(
+Future<List<String>?> editUrlAndToken(
   BuildContext context, {
   ConfirmType? type,
   String? url,
@@ -328,7 +340,10 @@ Future<String?> editUrlAndToken(
     ),
   );
   if (res == true) {
-    return urlInput.text;
+    return [
+      tokenInput.text,
+      urlInput.text,
+    ];
   }
   return null;
 }
