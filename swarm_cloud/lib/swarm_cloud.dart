@@ -16,7 +16,7 @@ class SwarmCloud {
   static Future<int> init(
     token, {
     required P2pConfig config,
-    CdnByeInfoListener? infoListener,
+    void Function(Map<String, dynamic>)? infoListener,
     SegmentIdGenerator? segmentIdGenerator,
   }) =>
       _platform.init(

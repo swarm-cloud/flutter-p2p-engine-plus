@@ -20,7 +20,7 @@ class SwarmCloudChannel extends SwarmCloudPlatform {
   Future<int> init(
     token, {
     required P2pConfig config,
-    CdnByeInfoListener? infoListener,
+    void Function(Map<String, dynamic>)? infoListener,
     SegmentIdGenerator? segmentIdGenerator, // 给SDK提供segmentId
     bool bufferedDurationGeneratorEnable = false, // 是否可以给SDK提供缓冲前沿到当前播放时间的差值
   }) async {

@@ -1,6 +1,6 @@
 name: swarm_cloud_platform_interface
 description: A platform_interface of swarm cloud sdk
-version: 0.3.0
+version: 0.3.2
 homepage:
 
 environment:

@@ -131,7 +131,7 @@ class P2pConfig {
 实例化P2pEngine，获得一个全局单例：
 ```dart
 // 初始化
-Cdnbye.init(
+SwarmCloud.init(
   token, // replace with your token
   config: P2pConfig.byDefault()
 );
@@ -147,7 +147,7 @@ Cdnbye.init(
 ### 切换源
 当播放器切换到新的播放地址时，只需要将新的播放地址(m3u8)传给 ***Cdnbye***，从而获取新的本地播放地址：
 ```dart
-String parsedUrl = await Cdnbye.parseStreamURL(url);
+String parsedUrl = await SwarmCloud.parseStreamURL(url);
 ```
 
 ### Cdnbye API
@@ -159,7 +159,7 @@ static Future<String> get platformVersion
 static Future<int> init(
   token, {
   P2pConfig config,
-  CdnByeInfoListener infoListener,
+  void Function(Map<String, dynamic>)? infoListener,
   String Function(int level, int sn, String url) segmentIdGenerator,
 })
 
