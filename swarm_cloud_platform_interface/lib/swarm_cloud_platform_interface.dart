@@ -163,10 +163,7 @@ class P2pConfig {
 
   /// 设置请求ts和m3u8时的HTTP请求头
   final Map<String, String>? httpHeaders;
-
-  /// 如果使用自定义的channelId，则此字段必须设置，且长度必须在5到15个字符之间，建议设置成你所在组织的唯一标识
-  // final String? channelIdPrefix;
-
+  
   /// 如果运行于机顶盒请设置成true
   final bool isSetTopBox;
 
