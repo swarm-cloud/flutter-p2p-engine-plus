@@ -2,8 +2,10 @@
 title: API文档
 ---
 
-## P2P配置
-实例化 ***P2pConfig*** ：
+## P2P 配置
+
+实例化 **_P2pConfig_** ：
+
 ```dart
 /// The configuration of p2p engine.
 class P2pConfig {
@@ -24,7 +26,7 @@ class P2pConfig {
 
   /// P2P在内存缓存的最大数据量，用ts文件个数表示，仅安卓有效
   final int memoryCacheCountLimit;
-  
+
   // @Deprecated('Use memoryCacheCountLimit now')
   // 仅iOS有效
   final int memoryCacheLimit;
@@ -127,8 +129,43 @@ class P2pConfig {
 
 ```
 
+## API 支持度
+
+P2pConfig:
+
+| 属性                        | iOS | Android | Web |
+| :-------------------------- | :-: | :-----: | :-: |
+| logLevel                    | ✅  |   ✅    | ✅  |
+| webRTCConfig                | ✅  |   ✅    | ✅  |
+| wsSignalerAddr              | ✅  |   ✅    | ❌  |
+| announce                    | ❌  |   ✅    | ✅  |
+| diskCacheLimit              | ✅  |   ✅    | ❌  |
+| memoryCacheLimit            | ✅  |   ✅    | ✅  |
+| memoryCacheCountLimit       | ✅  |   ✅    | ❌  |
+| p2pEnabled                  | ✅  |   ✅    | ✅  |
+| downloadTimeout             | ✅  |   ✅    | ❌  |
+| dcDownloadTimeout           | ✅  |   ✅    | ❌  |
+| tag                         | ✅  |   ✅    | ❌  |
+| localPort                   | ✅  |   ✅    | ❌  |
+| maxPeerConnections          | ✅  |   ✅    | ❌  |
+| useHttpRange                | ✅  |   ✅    | ✅  |
+| wifiOnly                    | ✅  |   ✅    | ❌  |
+| httpHeaders                 | ✅  |   ✅    | ❌  |
+| isSetTopBox                 | ✅  |   ✅    | ❌  |
+| httpLoadTime                | ✅  |   ✅    | ✅  |
+| logPersistent               | ✅  |   ✅    | ❌  |
+| sharePlaylist               | ✅  |   ✅    | ✅  |
+| waitForPeerInAndroid        | ❌  |   ✅    | ❌  |
+| waitForPeerTimeoutInAndroid | ❌  |   ✅    | ❌  |
+| hlsMediaFiles               | ✅  |   ✅    | ❌  |
+| logFilePathInIos            | ✅  |   ✅    | ❌  |
+| announceLocation            | ✅  |   ✅    | ❌  |
+| hlsMediaFileExtensions      | ✅  |   ✅    | ❌  |
+
 ## P2pEngine
-实例化P2pEngine，获得一个全局单例：
+
+实例化 P2pEngine，获得一个全局单例：
+
 ```dart
 // 初始化
 SwarmCloud.init(
@@ -136,24 +173,28 @@ SwarmCloud.init(
   config: P2pConfig.byDefault()
 );
 ```
+
 参数说明:
 <br>
 
-|           参数           |                      类型                      | 是否必须 |        说明         |
-| :----------------------: | :--------------------------------------------: | :------: | :-----------------: |
-|       ***token***        |                     String                     |    是    | CDNBye分配的token。 |
-|       ***config***       |                   P2pConfig                    |    否    |    自定义配置。      |
+|     参数     |   类型    | 是否必须 |         说明          |
+| :----------: | :-------: | :------: | :-------------------: |
+| **_token_**  |  String   |    是    | CDNBye 分配的 token。 |
+| **_config_** | P2pConfig |    否    |     自定义配置。      |
 
 ### 切换源
-当播放器切换到新的播放地址时，只需要将新的播放地址(m3u8)传给 ***Cdnbye***，从而获取新的本地播放地址：
+
+当播放器切换到新的播放地址时，只需要将新的播放地址(m3u8)传给 **_Cdnbye_**，从而获取新的本地播放地址：
+
 ```dart
 String parsedUrl = await SwarmCloud.parseStreamURL(url);
 ```
 
 ### Cdnbye API
+
 ```dart
 /// SDK的版本号
-static Future<String> get platformVersion 
+static Future<String> get platformVersion
 
 /// 实例化P2pEngine，获得一个全局单例。
 static Future<int> init(
@@ -182,16 +223,18 @@ static Future stopP2p()
 static Future<String> getPeerId()
 ```
 
-### P2P统计
+### P2P 统计
 
 请参考 [example](https://github.com/cdnbye/flutter-p2p-engine/tree/master/example)。
 
 ::: warning
-下载和上传数据量的单位是KB。
+下载和上传数据量的单位是 KB。
 :::
 
 ### 回调播放器信息
-在直播模式下，为了增强P2P效果并提高播放流畅度，建议通过 ***bufferedDurationGenerator*** ，将从当前播放时间到缓冲前沿的时间间隔回调给p2p engine。
+
+在直播模式下，为了增强 P2P 效果并提高播放流畅度，建议通过 **_bufferedDurationGenerator_** ，将从当前播放时间到缓冲前沿的时间间隔回调给 p2p engine。
+
 ```dart
 Cdnbye.init(
   token, // replace with your token
@@ -205,8 +248,9 @@ String parsedUrl = await Cdnbye.parseStreamURL(
 );
 ```
 
-### 解决动态m3u8路径问题
-某些流媒体提供商的m3u8是动态生成的，不同节点的m3u8地址不一样，例如example.com/clientId1/streamId.m3u8和example.com/clientId2/streamId.m3u8, 而本插件默认使用m3u8地址(去掉查询参数)作为channelId。这时候就要构造一个共同的chanelId，使实际观看同一直播/视频的节点处在相同频道中。构造channelId方法如下：
+### 解决动态 m3u8 路径问题
+
+某些流媒体提供商的 m3u8 是动态生成的，不同节点的 m3u8 地址不一样，例如 example.com/clientId1/streamId.m3u8 和 example.com/clientId2/streamId.m3u8, 而本插件默认使用 m3u8 地址(去掉查询参数)作为 channelId。这时候就要构造一个共同的 chanelId，使实际观看同一直播/视频的节点处在相同频道中。构造 channelId 方法如下：
 
 ```dart
 Cdnbye.init(
@@ -224,8 +268,10 @@ String url = await Cdnbye.parseStreamURL(originalUrl, videoId);
 如果要与其他平台互通，则必须确保两者拥有相同的 token 和 channelId 。
 :::
 
-### 解决动态ts路径问题
-类似动态m3u8路径问题，相同ts文件的路径也可能有差异，这时候需要忽略ts路径差异的部分。插件默认用ts的绝地路径(url)来标识每个ts文件，所以需要通过钩子函数重新构造标识符。可以按如下设置：
+### 解决动态 ts 路径问题
+
+类似动态 m3u8 路径问题，相同 ts 文件的路径也可能有差异，这时候需要忽略 ts 路径差异的部分。插件默认用 ts 的绝地路径(url)来标识每个 ts 文件，所以需要通过钩子函数重新构造标识符。可以按如下设置：
+
 ```dart
 // 初始化
 Cdnbye.init(
@@ -236,8 +282,10 @@ Cdnbye.init(
 );
 ```
 
-### 设置HTTP请求头
-出于防盗链或者统计的需求，有些HTTP请求需要加上 ***referer*** 或者 ***User-Agent*** 等头信息，可以通过 ***httpHeaders*** 进行设置：
+### 设置 HTTP 请求头
+
+出于防盗链或者统计的需求，有些 HTTP 请求需要加上 **_referer_** 或者 **_User-Agent_** 等头信息，可以通过 **_httpHeaders_** 进行设置：
+
 ```dart
 P2pConfig(
   httpHeaders: {
