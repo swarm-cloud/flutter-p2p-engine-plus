@@ -83,6 +83,9 @@ class SwarmCloudWeb extends SwarmCloudPlatform {
             headers.forEach((String key, String value) {
               if (key != 'useCookies') xhr.setRequestHeader(key, value);
             });
+            config.httpHeaders?.forEach((key, value) {
+              xhr.setRequestHeader(key, value);
+            });
           },
         ),
         p2pConfig: p2pConfig,

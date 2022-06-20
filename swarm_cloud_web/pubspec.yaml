@@ -1,6 +1,6 @@
 name: swarm_cloud_web
 description: Swarm Cloud SDK web platform.
-version: 0.3.2
+version: 0.3.3
 homepage:
 
 environment:

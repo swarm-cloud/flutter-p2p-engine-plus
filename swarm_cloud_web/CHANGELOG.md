@@ -1,3 +1,6 @@
+# 0.3.3
+
+- Support httpHeaders
 # 0.3.2
 
 - Fix api
