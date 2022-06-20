@@ -150,7 +150,7 @@ P2pConfig:
 | maxPeerConnections          | ✅  |   ✅    | ❌  |
 | useHttpRange                | ✅  |   ✅    | ✅  |
 | wifiOnly                    | ✅  |   ✅    | ❌  |
-| httpHeaders                 | ✅  |   ✅    | ❌  |
+| httpHeaders                 | ✅  |   ✅    | ✅  |
 | isSetTopBox                 | ✅  |   ✅    | ❌  |
 | httpLoadTime                | ✅  |   ✅    | ✅  |
 | logPersistent               | ✅  |   ✅    | ❌  |
@@ -177,20 +177,20 @@ SwarmCloud.init(
 参数说明:
 <br>
 
-|     参数     |   类型    | 是否必须 |         说明          |
-| :----------: | :-------: | :------: | :-------------------: |
-| **_token_**  |  String   |    是    | CDNBye 分配的 token。 |
-| **_config_** | P2pConfig |    否    |     自定义配置。      |
+|     参数     |   类型    | 是否必须 |           说明            |
+| :----------: | :-------: | :------: | :-----------------------: |
+| **_token_**  |  String   |    是    | SwarmCloud 分配的 token。 |
+| **_config_** | P2pConfig |    否    |       自定义配置。        |
 
 ### 切换源
 
-当播放器切换到新的播放地址时，只需要将新的播放地址(m3u8)传给 **_Cdnbye_**，从而获取新的本地播放地址：
+当播放器切换到新的播放地址时，只需要将新的播放地址(m3u8)传给 **_SwarmCloud_**，从而获取新的本地播放地址：
 
 ```dart
 String parsedUrl = await SwarmCloud.parseStreamURL(url);
 ```
 
-### Cdnbye API
+### SwarmCloud API
 
 ```dart
 /// SDK的版本号
@@ -236,7 +236,7 @@ static Future<String> getPeerId()
 在直播模式下，为了增强 P2P 效果并提高播放流畅度，建议通过 **_bufferedDurationGenerator_** ，将从当前播放时间到缓冲前沿的时间间隔回调给 p2p engine。
 
 ```dart
-Cdnbye.init(
+SwarmCloud.init(
   token, // replace with your token
   bufferedDurationGeneratorEnable: true,
 );
@@ -253,7 +253,7 @@ String parsedUrl = await Cdnbye.parseStreamURL(
 某些流媒体提供商的 m3u8 是动态生成的，不同节点的 m3u8 地址不一样，例如 example.com/clientId1/streamId.m3u8 和 example.com/clientId2/streamId.m3u8, 而本插件默认使用 m3u8 地址(去掉查询参数)作为 channelId。这时候就要构造一个共同的 chanelId，使实际观看同一直播/视频的节点处在相同频道中。构造 channelId 方法如下：
 
 ```dart
-Cdnbye.init(
+SwarmCloud.init(
   token,   // replace with your token
   segmentIdGenerator: (streamId, int sn, String segmentUrl, String? range) {
     return '$sn';
@@ -261,7 +261,7 @@ Cdnbye.init(
 );
 // 根据url构造videoId
 String videoId = extractVideoIdFromUrl(originalUrl);     // extractVideoIdFromUrl 需要自己定义，可以抽取url中的视频ID作为结果返回
-String url = await Cdnbye.parseStreamURL(originalUrl, videoId);
+String url = await SwarmCloud.parseStreamURL(originalUrl, videoId);
 ```
 
 ::: warning
@@ -274,7 +274,7 @@ String url = await Cdnbye.parseStreamURL(originalUrl, videoId);
 
 ```dart
 // 初始化
-Cdnbye.init(
+SwarmCloud.init(
   token,   // replace with your token
   segmentIdGenerator: (streamId, int sn, String segmentUrl, String? range) {
     return '$sn';
