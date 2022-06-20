@@ -6,7 +6,7 @@ title: 使用方法
 在项目的 ***pubspec.yaml*** 中添加依赖：
 ```
 dependencies:
-  swarm_cloud: ^0.3.1
+  swarm_cloud: ^0.3.4
 ```
 
 也可以使用命令：

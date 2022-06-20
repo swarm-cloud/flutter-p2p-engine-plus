@@ -1,3 +1,6 @@
+# 0.3.4
+
+- Update readme
 # 0.3.3
 
 - Update swarm_cloud_web version

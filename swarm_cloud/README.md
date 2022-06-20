@@ -6,8 +6,7 @@ title: 簡介
 Flutter視頻/直播APP省流量&加速引擎!
 :::
 
-<a href="https://pub.dartlang.org/packages/cdnbye"><img src="https://img.shields.io/pub/v/cdnbye.svg" alt="pub"></a>
-
+<a href="https://pub.dartlang.org/packages/swarm_cloud">< img src="https://img.shields.io/pub/v/swarm_cloud.svg" alt="pub"></a >
 ### 特性
 - 支持iOS和安卓平臺，可與[Web端插件](https://github.com/cdnbye/hlsjs-p2p-engine)P2P互通
 - 支持基於HLS流媒體協議(m3u8)的直播和點播場景
