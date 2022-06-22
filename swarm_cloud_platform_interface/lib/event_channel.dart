@@ -99,6 +99,9 @@ class SwarmCloudChannel extends SwarmCloudPlatform {
   @override
   Future<void> stopP2p() => _channel.invokeMethod('stopP2p');
 
+  @override
+  Future<void> shutdown() => _channel.invokeMethod('shutdown');
+
   /// Get the peer ID of p2p engine. 获取P2P Engine的peer ID
   @override
   Future<String> getPeerId() async =>

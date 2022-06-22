@@ -1,3 +1,7 @@
+# 0.5.0
+
+- update interface
+
 # 0.3.3
 
 - Support httpHeaders

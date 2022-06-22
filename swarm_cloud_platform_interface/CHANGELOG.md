@@ -1,3 +1,6 @@
+# 0.5.0
+
+- Add shutdown api.
 # 0.3.2
 
 - Fix api

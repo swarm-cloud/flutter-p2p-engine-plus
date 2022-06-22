@@ -110,10 +110,10 @@ class SwarmCloudWeb extends SwarmCloudPlatform {
   }
 
   /// Get the connection state of p2p engine. 获取P2P Engine的连接状态
-  @override
-  Future<bool> isConnected() async {
-    return true;
-  }
+  // @override
+  // Future<bool> isConnected() async {
+  //   return true;
+  // }
 
   /// Restart p2p engine.
   @override

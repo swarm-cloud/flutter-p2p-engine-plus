@@ -5,10 +5,7 @@
 
 import 'dart:async';
 
-import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:plugin_platform_interface/plugin_platform_interface.dart';
-import 'package:safemap/safemap.dart';
 import 'package:swarm_cloud_platform_interface/event_channel.dart';
 
 SegmentIdGenerator defaultSegmentIdGenerator = (
@@ -94,6 +91,8 @@ class SwarmCloudPlatform extends PlatformInterface {
   /// Stop p2p and free used resources.
   Future<void> stopP2p() => _instance.stopP2p();
 
+  Future<void> shutdown() => _instance.shutdown();
+
   /// Get the peer ID of p2p engine. 获取P2P Engine的peer ID
   Future<String> getPeerId() => _instance.getPeerId();
 }
@@ -163,7 +162,7 @@ class P2pConfig {
 
   /// 设置请求ts和m3u8时的HTTP请求头
   final Map<String, String>? httpHeaders;
-  
+
   /// 如果运行于机顶盒请设置成true
   final bool isSetTopBox;
 
