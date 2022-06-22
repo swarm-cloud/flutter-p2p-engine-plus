@@ -123,7 +123,12 @@
   else if([@"getPeerId" isEqualToString:call.method]) {
       result([SWCP2pEngine sharedInstance].peerId);
   }
-    
+     
+  else if([@"shutdown" isEqualToString:call.method]) {
+      [[SWCP2pEngine sharedInstance] shutdown];
+      result(@1);
+  }
+
   else {
       // NSLog(@"没找到方法:%@",call.method);
       result(FlutterMethodNotImplemented);

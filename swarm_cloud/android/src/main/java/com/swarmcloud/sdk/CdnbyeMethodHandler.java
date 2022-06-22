@@ -293,6 +293,9 @@ public class CdnbyeMethodHandler implements MethodChannel.MethodCallHandler {
         } else if (call.method.equals("stopP2p")) {
             P2pEngine.getInstance().stopP2p();
             result.success(1);
+        }  else if (call.method.equals("shutdown")) {
+            P2pEngine.getInstance().shutdown();
+            result.success(1);
         } else if (call.method.equals("getPeerId")) {
             result.success(P2pEngine.getInstance().getPeerId());
         }

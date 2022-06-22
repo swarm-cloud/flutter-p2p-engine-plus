@@ -1,3 +1,6 @@
+# 0.5.0
+
+- Support shutdown function
 # 0.3.5
 
 - Update readme
